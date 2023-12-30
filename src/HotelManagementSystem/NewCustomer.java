@@ -5,10 +5,11 @@ import java.awt.EventQueue;
 
 import java.awt.Font;
 import java.awt.Image;
-import java.sql.*;	
+import java.sql.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 
 public class NewCustomer extends JFrame {
 	Connection conn = null;
@@ -34,14 +35,14 @@ public class NewCustomer extends JFrame {
 
 	public NewCustomer() throws SQLException {
 		//	Beginning of the background image
-		setBounds(530, 200, 850, 550);
+		setBounds(530, 200, 850, 630);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
 
 		// Load the image
-		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/beach 2.jpg"));
-		Image i3 = i1.getImage().getScaledInstance(850, 550, Image.SCALE_DEFAULT); // Scale it to the size of the frame
+		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/beach 3.jpg"));
+		Image i3 = i1.getImage().getScaledInstance(850, 630, Image.SCALE_DEFAULT); // Scale it to the size of the frame
 		ImageIcon i2 = new ImageIcon(i3);
 
 		// Create a new JPanel with overridden paintComponent method
@@ -78,7 +79,7 @@ public class NewCustomer extends JFrame {
 
 		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
 		componentsPane.setLayout(null);
-		componentsPane.setBounds(170, 30, 500, 470);
+		componentsPane.setBounds(170, 70, 500, 470);
 
 		// Add the components to the componentsPane instead of the contentPane
 		JLabel lblName = new JLabel("NEW CUSTOMER");
@@ -92,6 +93,7 @@ public class NewCustomer extends JFrame {
 
 		comboBox = new JComboBox(new String[] {"Passport", "Identification Card", "Driving License", "Voter ID"});
 		comboBox.setBounds(280, 73, 150, 20);
+		comboBox.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(comboBox);
 
 		JLabel l2 = new JLabel("Number :");
@@ -102,6 +104,7 @@ public class NewCustomer extends JFrame {
 		t1 = new JTextField();
 		t1.setBounds(280, 111, 150, 20);
 		componentsPane.add(t1);
+		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t1.setColumns(10);
 
 		JLabel lblName_1 = new JLabel("Name :");
@@ -112,6 +115,7 @@ public class NewCustomer extends JFrame {
 		t2 = new JTextField();
 		t2.setBounds(280, 151, 150, 20);
 		componentsPane.add(t2);
+		t2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t2.setColumns(10);
 
 		JLabel lblGender = new JLabel("Gender :");
@@ -147,6 +151,7 @@ public class NewCustomer extends JFrame {
 
 		JLabel lblReserveRoomNumber = new JLabel("Allocated Room Number :");
 		lblReserveRoomNumber.setBounds(80, 274, 200, 14);
+		lblReserveRoomNumber.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(lblReserveRoomNumber);
 
 		c1 = new Choice();
@@ -165,32 +170,112 @@ public class NewCustomer extends JFrame {
 		lblCheckInStatus.setBounds(80, 316, 200, 14);
 		componentsPane.add(lblCheckInStatus);
 
-		JLabel lblDeposite = new JLabel("Deposit :");
-		lblDeposite.setBounds(80, 359, 200, 14);
-		componentsPane.add(lblDeposite);
+		JLabel lblDeposit = new JLabel("Deposit :");
+		lblDeposit.setBounds(80, 359, 200, 14);
+		componentsPane.add(lblDeposit);
 
 		//	Country
 		t3 = new JTextField();
 		t3.setBounds(280, 231, 150, 20);
 		componentsPane.add(t3);
+		t3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t3.setColumns(10);
 
 		//	Check-In
 		t5 = new JTextField();
 		t5.setBounds(280, 316, 150, 20);
 		componentsPane.add(t5);
+		t5.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t5.setColumns(10);
 
 		//	Deposit
 		t6 = new JTextField();
 		t6.setBounds(280, 359, 150, 20);
 		componentsPane.add(t6);
+		t6.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t6.setColumns(10);
 
 		// Upon the submission event, the input data are collected and submitted to the database
+		// Add Customer Button
 		JButton btnNewButton = new JButton("Add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Validation
+				// Check if the ID method is selected
+				if (comboBox.getSelectedItem() == null || comboBox.getSelectedItem().toString().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "ID method is required");
+					return;
+				}
+
+				// Check if ID Number is empty
+				if (t1.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "ID number is required");
+					return;
+				}
+				// Validate ID Number
+				if (!t1.getText().matches("\\d+")) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid ID number");
+					return;
+				}
+
+				// Check if Name is empty
+				if (t2.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Name is required");
+					return;
+				}
+				// Validate Name
+				if (!t2.getText().matches("^[a-zA-Z\\s]+$")) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid name");
+					return;
+				}
+
+				// Check if the Gender is selected
+				if (!r1.isSelected() && !r2.isSelected()) {
+					JOptionPane.showMessageDialog(null, "Gender is required");
+					return;
+				}
+
+				// Check if Country is empty
+				if (t3.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Country is required");
+					return;
+				}
+				// Validate Country
+				if (!t3.getText().matches("^[a-zA-Z\\s]+$")) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid country name");
+					return;
+				}
+
+				// Check if the room number is allocated
+				if (c1.getSelectedItem() == null || c1.getSelectedItem().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Allocated room number is required");
+					return;
+				}
+
+				// Check if Check-In Date is empty
+				if (t5.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Check-In Date is required");
+					return;
+				}
+				// Validate Check-In Date
+				if (!t5.getText().matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)\\d\\d)$")) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid date in the format dd/mm/yyyy");
+					return;
+				}
+
+				// Check if Deposit is empty
+				if (t6.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Deposit is required");
+					return;
+				}
+				// Validate Deposit
+				if (!t6.getText().matches("^\\d*(\\.\\d+)?$")) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid deposit amount");
+					return;
+				}
+
+
+				// Establish connection with the database server
 				conn c = new conn();
 				String radio = null;
 
@@ -231,27 +316,22 @@ public class NewCustomer extends JFrame {
 		btnNewButton.setForeground(Color.WHITE);
 		componentsPane.add(btnNewButton);
 
-		// Return Button
-
-		// Custom JButton class
-		class RoundButton extends JButton {
-			public RoundButton(String label) {
-				super(label);
-				setOpaque(false); // As the paintComponent method will handle the rendering
+		btnNewButton.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnNewButton.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnNewButton.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
 			}
 
-			@Override
-			protected void paintComponent(Graphics g) {
-				int diameter = Math.min(getWidth(), getHeight());
-				g.setColor(getBackground());
-				g.fillOval(getWidth() / 2 - diameter / 2, getHeight() / 2 - diameter / 2, diameter, diameter);
-
-				super.paintComponent(g);
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnNewButton.setBackground(Color.BLACK); // Original color of background
+				btnNewButton.setForeground(Color.WHITE); // Original color of font
 			}
-		}
+		});
+		// End of Add Customer Button
 
-		// Usage
-		RoundButton btnExit = new RoundButton("X");
+
+		// Exit or Return Button
+		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Reception().setVisible(true);
@@ -261,10 +341,21 @@ public class NewCustomer extends JFrame {
 		btnExit.setBounds(270, 415, 125, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
-		btnExit.setOpaque(false);
-		componentsPane.add(btnExit);
+		btnExit.addMouseListener(new java.awt.event.MouseAdapter(){
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.WHITE); //WHITE BG when mouse hovers over
+				btnExit.setForeground(Color.BLACK); //BLACK FONT when mouse hovers over
+			}
 
-		// Add the componentsPane to the contentPane
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.BLACK); // Original color of background
+				btnExit.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		componentsPane.add(btnExit);
+		// End of Exit Button
+
+		// Add the componentsPane(that contains all the components) to the contentPane
 		contentPane.add(componentsPane);
 	}
 }

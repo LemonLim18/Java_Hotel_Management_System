@@ -16,7 +16,7 @@ public class Reception extends JFrame {
 	
 	public Reception(){
 		
-		setBounds(530, 200, 850, 570);
+		setBounds(530, 200, 850, 600);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -229,6 +229,26 @@ public class Reception extends JFrame {
 
 		contentPane.add(btnSearchRoom);
 
+		// Update customer information
+		JButton btnUpdateCustomer = new JButton("Update Customer Info");
+		btnUpdateCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					UpdateCustomerInfo updatePage = new UpdateCustomerInfo();
+					updatePage.setVisible(true);
+					setVisible(false);
+				}catch (Exception ss){
+					ss.printStackTrace();
+				}
+			}
+		});
+		btnUpdateCustomer.setBounds(10, 470, 200, 30);
+		btnUpdateCustomer.setBackground(Color.BLACK);
+		btnUpdateCustomer.setForeground(Color.WHITE);
+
+		contentPane.add(btnUpdateCustomer);
+//		 End of update customer button
+
 		JButton btnNewButton_7 = new JButton("Log Out");
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -238,16 +258,16 @@ public class Reception extends JFrame {
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-		btnNewButton_7.setBounds(10, 470, 200, 30);
+		btnNewButton_7.setBounds(10, 510, 200, 30);
 		btnNewButton_7.setBackground(Color.BLACK);
 		btnNewButton_7.setForeground(Color.WHITE);
 
 		contentPane.add(btnNewButton_7);
 		getContentPane().setBackground(Color.WHITE);
-                
+
 		setVisible(true);
 	}
 }
