@@ -1,12 +1,14 @@
 package HotelManagementSystem;
 
 import java.awt.*;
+import java.awt.EventQueue;
 
 import java.sql.*;	
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -40,25 +42,63 @@ public class UpdateCheck extends JFrame {
 
 	public UpdateCheck() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(500, 200, 950, 500);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// Beginning of the background image
+		setBounds(530, 200, 850, 630);
+
+		// Make the JFrame non-resizable
+		setResizable(false);
+
+		// Load the image
+		ImageIcon image1 = new ImageIcon(ClassLoader.getSystemResource("icons/chalet.jpg"));
+		Image image3 = image1.getImage().getScaledInstance(850, 630, Image.SCALE_DEFAULT);  // Scale it to the size of the frame
+		ImageIcon image2 = new ImageIcon(image3);
+
+		// Create a new JPanel with overridden paintComponent method
+		contentPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				// Draw the image on the panel
+				g.drawImage(image2.getImage(), 0, 0, this);
+			}
+		};
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblUpdateCheckStatus = new JLabel("Check-In Details");
-		lblUpdateCheckStatus.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblUpdateCheckStatus.setBounds(124, 11, 222, 25);
-		contentPane.add(lblUpdateCheckStatus);
-                
-		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/nine.jpg"));
-		JLabel l1 = new JLabel(i1);
-		l1.setBounds(450,70,476,270);
-		add(l1);
+// End of background Image
+
+		// WHITE CONTAINER(Components)
+		// Set the border radius to the white container
+		JPanel componentsPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				if (!(g instanceof Graphics2D)) {
+					return;
+				}
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// Set the white background to translucent
+				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 45, 45);
+				super.paintComponent(g);
+			}
+		};
+		componentsPane.setOpaque(false);
+
+		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
+		componentsPane.setLayout(null);
+		componentsPane.setBounds(170, 70, 500 , 470);
+
+		// Add the components to the componentsPane instead of the contentPane
+		JLabel lblUpdateCheckStatus = new JLabel("CUSTOMER STATUS UPDATE");
+		lblUpdateCheckStatus.setFont(new Font("Rambla", Font.BOLD, 20));
+		lblUpdateCheckStatus.setBounds(105, 31, 300, 53);
+		componentsPane.add(lblUpdateCheckStatus);
 		
 		JLabel lblNewLabel = new JLabel("ID:");
-		lblNewLabel.setBounds(25, 88, 46, 14);
-		contentPane.add(lblNewLabel);
+		lblNewLabel.setBounds(80, 115, 200, 14);
+		componentsPane.add(lblNewLabel);
                 
 		c1 = new Choice();
 		try{
@@ -68,53 +108,60 @@ public class UpdateCheck extends JFrame {
 				c1.add(rs.getString("number"));
 			}
 		}catch(Exception e){ }
-		c1.setBounds(248, 85, 140, 20);
-		contentPane.add(c1);
+		c1.setBounds(280, 115, 140, 20);
+		componentsPane.add(c1);
 		
 		JLabel lblNewLabel_1 = new JLabel("Room Number :");
-		lblNewLabel_1.setBounds(25, 129, 107, 14);
-		contentPane.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(80, 159, 107, 14);
+		componentsPane.add(lblNewLabel_1);
                 
 		txt_ID = new JTextField();
-		txt_ID.setBounds(248, 126, 140, 20);
-		contentPane.add(txt_ID);
+		txt_ID.setBounds(280, 156, 140, 20);
+		txt_ID.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		componentsPane.add(txt_ID);
 		
 		JLabel lblNewLabel_2 = new JLabel("Name : ");
-		lblNewLabel_2.setBounds(25, 174, 97, 14);
-		contentPane.add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(80, 204, 97, 14);
+		componentsPane.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("Checked-in :");
-		lblNewLabel_3.setBounds(25, 216, 107, 14);
-		contentPane.add(lblNewLabel_3);
+		JLabel lblNewLabel_3 = new JLabel("Checked-in Date :");
+		lblNewLabel_3.setBounds(80, 246, 107, 14);
+		componentsPane.add(lblNewLabel_3);
 		
-		JLabel lblNewLabel_4 = new JLabel("Amount Paid (Rs) : ");
-		lblNewLabel_4.setBounds(25, 261, 107, 14);
-		contentPane.add(lblNewLabel_4);
+		JLabel lblNewLabel_4 = new JLabel("Amount Paid (RM) : ");
+		lblNewLabel_4.setBounds(80, 291, 115, 14);
+		componentsPane.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("Pending Amount (Rs) : ");
-		lblNewLabel_5.setBounds(25, 302, 150, 14);
-		contentPane.add(lblNewLabel_5);
+		JLabel lblNewLabel_5 = new JLabel("Pending Amount (RM) : ");
+		lblNewLabel_5.setBounds(80, 332, 150, 14);
+		componentsPane.add(lblNewLabel_5);
 
 		txt_Status = new JTextField();
-		txt_Status.setBounds(248, 171, 140, 20);
-		contentPane.add(txt_Status);
+		txt_Status.setBounds(280, 201, 140, 20);
+		componentsPane.add(txt_Status);
+		txt_Status.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txt_Status.setColumns(10);
 		
 		txt_Date = new JTextField();
-		txt_Date.setBounds(248, 216, 140, 20);
-		contentPane.add(txt_Date);
+		txt_Date.setBounds(280, 246, 140, 20);
+		componentsPane.add(txt_Date);
+		txt_Date.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txt_Date.setColumns(10);
 		
 		txt_Time = new JTextField();
-		txt_Time.setBounds(248, 258, 140, 20);
-		contentPane.add(txt_Time);
+		txt_Time.setBounds(280, 288, 140, 20);
+		componentsPane.add(txt_Time);
+		txt_Time.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txt_Time.setColumns(10);
 		
 		txt_Payment = new JTextField();
-		txt_Payment.setBounds(248, 299, 140, 20);
-		contentPane.add(txt_Payment);
+		txt_Payment.setBounds(280, 329, 140, 20);
+		componentsPane.add(txt_Payment);
+		txt_Payment.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txt_Payment.setColumns(10);
-		
+
+
+		// Beginning of UPDATE BUTTON
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) { 
@@ -137,11 +184,26 @@ public class UpdateCheck extends JFrame {
 				}
 			}
 		});
-		btnUpdate.setBounds(168, 378, 89, 23);
+		btnUpdate.setBounds(207, 398, 89, 30);
 		btnUpdate.setBackground(Color.BLACK);
 		btnUpdate.setForeground(Color.WHITE);
-		contentPane.add(btnUpdate);
-		
+		componentsPane.add(btnUpdate);
+
+		btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnUpdate.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnUpdate.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnUpdate.setBackground(Color.BLACK); // Original color of background
+				btnUpdate.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		// End of UPDATE BUTTON
+
+
+		// Beginning of EXIT BUTTON
 		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -149,11 +211,26 @@ public class UpdateCheck extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(281, 378, 89, 23);
+		btnExit.setBounds(319, 398, 89, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
-		contentPane.add(btnExit);
-		
+		componentsPane.add(btnExit);
+
+		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.BLACK); // Original color of background
+				btnExit.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		// End of EXIT BUTTON
+
+
+		// Beginning of CHECK BUTTON
 		JButton btnAdd = new JButton("Check");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -161,7 +238,7 @@ public class UpdateCheck extends JFrame {
 					String s1 = c1.getSelectedItem();
 					conn c = new conn();
 					ResultSet rs1 = c.s.executeQuery("select * from customer where number = "+s1);
-                                
+
 					while(rs1.next()){
 						txt_ID.setText(rs1.getString("room_number"));
 						txt_Status.setText(rs1.getString("name"));
@@ -169,7 +246,7 @@ public class UpdateCheck extends JFrame {
 						txt_Time.setText(rs1.getString("deposit"));
 					}
 				}catch(Exception ignored){}
-                            
+
 				try{
 					String total = "";
 					conn c  = new conn();
@@ -179,18 +256,32 @@ public class UpdateCheck extends JFrame {
 					}
 					String paid = txt_Time.getText();
 					int pending = Integer.parseInt(total)- Integer.parseInt(paid);
-                                
+
 					txt_Payment.setText(Integer.toString(pending));
-                                
+
 				}catch(Exception ignored){}
 			}
 		});
-		btnAdd.setBounds(56, 378, 89, 23);
+
+		btnAdd.setBounds(95, 398, 89, 30);
 		btnAdd.setBackground(Color.BLACK);
 		btnAdd.setForeground(Color.WHITE);
-		contentPane.add(btnAdd);
+		componentsPane.add(btnAdd);
+
+		btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnAdd.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnAdd.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnAdd.setBackground(Color.BLACK); // Original color of background
+				btnAdd.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		// End of CHECK BUTTON
                 
-		getContentPane().setBackground(Color.WHITE);
+		contentPane.add(componentsPane);
 	}
 
 }

@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import net.proteanit.sql.DbUtils;
 import java.sql.*;	
 import javax.swing.*;
 import javax.swing.JTable;
@@ -52,7 +51,57 @@ public class CustomerInfo extends JFrame {
 		this.dispose();
 	}
 
-	private void loadData() {
+	public CustomerInfo() throws SQLException {
+		//conn = Javaconnect.getDBConnection();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		setBounds(200, 100, 1100, 650); // DIMENSION OF WINDOW
+		setResizable(false); // Make the JFrame non-resizable
+
+		// Load the image
+		ImageIcon photo  = new ImageIcon(ClassLoader.getSystemResource("icons/purple sea.png"));
+		Image resizedPhoto = photo.getImage().getScaledInstance(1100, 650, Image.SCALE_DEFAULT); // Scale it to the size of the frame
+		ImageIcon bgPic = new ImageIcon(resizedPhoto);
+
+		// Create a new JPanel with overridden paintComponent method
+		contentPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				// Draw the image on the panel
+				g.drawImage(bgPic.getImage(), 0, 0, this);
+			}
+		};
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		//End of background image
+
+		// WHITE CONTAINER(Components)
+		// Set the border radius to the white container
+		JPanel componentsPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				if (!(g instanceof Graphics2D)) {
+					return;
+				}
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// Set the white background to translucent
+				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 45, 45);
+				super.paintComponent(g);
+			}
+		};
+		componentsPane.setOpaque(false);
+
+		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
+		componentsPane.setLayout(null);
+		componentsPane.setBounds(90, 65, 932, 490);
+		// END OF WHITE CONTAINER
+
+		// TABLE INITIALIZATION
+		table = new JTable(); //initialize the table for the first use
 		try{
 			conn c  = new conn();
 			String displayCustomersql = "select * from Customer";
@@ -101,47 +150,17 @@ public class CustomerInfo extends JFrame {
 			JScrollPane scrollPane = new JScrollPane(tablePanel);
 
 			// tableDimension
-			scrollPane.setBounds(0, 85, 902, 370);
+			scrollPane.setBounds(15, 55, 900, 370);
 
 			// Add the JScrollPane to the content pane
-			contentPane.add(scrollPane);
+			componentsPane.add(scrollPane);
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-
-	public CustomerInfo() throws SQLException {
-		//conn = Javaconnect.getDBConnection();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		setBounds(530, 200, 900, 600); // DIMENSION OF WINDOW
-		setResizable(false); // Make the JFrame non-resizable
-
-		// Load the image
-		ImageIcon photo  = new ImageIcon(ClassLoader.getSystemResource("icons/beach 3.jpg"));
-		Image resizedPhoto = photo.getImage().getScaledInstance(900, 630, Image.SCALE_DEFAULT); // Scale it to the size of the frame
-		ImageIcon bgPic = new ImageIcon(resizedPhoto);
-
-		// Create a new JPanel with overridden paintComponent method
-		contentPane = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				// Draw the image on the panel
-				g.drawImage(bgPic.getImage(), 0, 0, this);
-			}
-		};
-
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		// TABLE INITIALIZATION
-		table = new JTable(); //initialize the table for the first use
-		loadData();
 
 		// END OF INITIALIZATION METHOD/CONSTRUCTOR
+
 
 		// RETURN BUTTON
 		JButton btnExit = new JButton("Back");
@@ -163,53 +182,54 @@ public class CustomerInfo extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(375, 500, 120, 30);
+		btnExit.setBounds(380, 443, 120, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
-		contentPane.add(btnExit);
+		componentsPane.add(btnExit);
 		// END OF RETURN BUTTON
 
 		lblId = new JLabel("ID");
-		lblId.setBounds(53, 56, 44, 14);
-		lblId.setForeground(Color.WHITE);
-		contentPane.add(lblId);
+		lblId.setBounds(65, 23, 44, 14);
+		lblId.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblId);
                 
 		JLabel l1 = new JLabel("Number");
-		l1.setBounds(150, 56, 46, 14);
-		l1.setForeground(Color.WHITE);
-		contentPane.add(l1);
+		l1.setBounds(160, 23, 46, 14);
+		l1.setForeground(new Color(72, 41, 245));
+		componentsPane.add(l1);
 		
 		lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(265, 56, 65, 14);
-		lblNewLabel.setForeground(Color.WHITE);
-		contentPane.add(lblNewLabel);
+		lblNewLabel.setBounds(275, 23, 65, 14);
+		lblNewLabel.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblNewLabel);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setBounds(360, 56, 46, 14);
-		lblGender.setForeground(Color.WHITE);
-		contentPane.add(lblGender);
+		lblGender.setBounds( 380, 23, 46, 14);
+		lblGender.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblGender);
 		
 		lblCountry = new JLabel("Country");
-		lblCountry.setBounds(480, 56, 46, 14);
-		lblCountry.setForeground(Color.WHITE);
-		contentPane.add(lblCountry);
+		lblCountry.setBounds(485, 23, 46, 14);
+		lblCountry.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblCountry);
 		
 		lblRoom = new JLabel("Room");
-		lblRoom.setBounds(600, 56, 46, 14);
-		lblRoom.setForeground(Color.WHITE);
-		contentPane.add(lblRoom);
+		lblRoom.setBounds(605, 23, 46, 14);
+		lblRoom.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblRoom);
 		
-		lblStatus = new JLabel("Check-in Status");
-		lblStatus.setBounds(685, 56, 100, 14);
-		lblStatus.setForeground(Color.WHITE);
-		contentPane.add(lblStatus);
+		lblStatus = new JLabel("Check-in Date");
+		lblStatus.setBounds(695, 23, 100, 14);
+		lblStatus.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblStatus);
 		
 		lblNewLabel_1 = new JLabel("Deposit");
-		lblNewLabel_1.setBounds(810, 56, 100, 14);
-		lblNewLabel_1.setForeground(Color.WHITE);
-		contentPane.add(lblNewLabel_1);
-                
-		getContentPane().setBackground(Color.WHITE);
+		lblNewLabel_1.setBounds(825, 23, 100, 14);
+		lblNewLabel_1.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblNewLabel_1);
+
+		// Add all the components that we insert into the componentsPane into the contentPane container
+		contentPane.add(componentsPane);
 	}
 }
 

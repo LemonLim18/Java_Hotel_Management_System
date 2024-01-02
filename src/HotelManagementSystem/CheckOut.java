@@ -51,7 +51,7 @@ public class CheckOut extends JFrame{
 		add(l1);
 		
 		JLabel lblCheckOut = new JLabel("Check Out ");
-		lblCheckOut.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblCheckOut.setFont(new Font("Rambla", Font.PLAIN, 20));
 		lblCheckOut.setBounds(70, 11, 140, 35);
 		contentPane.add(lblCheckOut);
 		
@@ -80,7 +80,6 @@ public class CheckOut extends JFrame{
 		l2.addActionListener(new ActionListener(){
                     
 			public void actionPerformed(ActionEvent ae){
-				System.out.println("Hi");
 				try{
                             
 					conn c = new conn();

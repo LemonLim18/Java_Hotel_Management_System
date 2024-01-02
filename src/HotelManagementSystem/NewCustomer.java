@@ -159,7 +159,7 @@ public class NewCustomer extends JFrame {
 			conn c = new conn();
 			ResultSet rs = c.s.executeQuery("select * from room");
 			while(rs.next()){
-				c1.add(rs.getString("room_number"));
+				c1.add(rs.getString("roomnumber"));
 			}
 		}catch(Exception ignored){ }
 
@@ -170,7 +170,7 @@ public class NewCustomer extends JFrame {
 		lblCheckInStatus.setBounds(80, 316, 200, 14);
 		componentsPane.add(lblCheckInStatus);
 
-		JLabel lblDeposit = new JLabel("Deposit :");
+		JLabel lblDeposit = new JLabel("Deposit (RM) :");
 		lblDeposit.setBounds(80, 359, 200, 14);
 		componentsPane.add(lblDeposit);
 
@@ -295,7 +295,7 @@ public class NewCustomer extends JFrame {
 					String s7 =  t5.getText();
 					String s8 =  t6.getText();
 					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
-					String q2 = "update room set availability = 'Occupied' where room_number = "+s6;
+					String q2 = "update room set availability = 'Occupied' where roomnumber = "+s6;
 					c.s.executeUpdate(q1);
 					c.s.executeUpdate(q2);
 

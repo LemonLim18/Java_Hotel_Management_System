@@ -229,26 +229,6 @@ public class Reception extends JFrame {
 
 		contentPane.add(btnSearchRoom);
 
-		// Update customer information
-		JButton btnUpdateCustomer = new JButton("Update Customer Info");
-		btnUpdateCustomer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					UpdateCustomerInfo updatePage = new UpdateCustomerInfo();
-					updatePage.setVisible(true);
-					setVisible(false);
-				}catch (Exception ss){
-					ss.printStackTrace();
-				}
-			}
-		});
-		btnUpdateCustomer.setBounds(10, 470, 200, 30);
-		btnUpdateCustomer.setBackground(Color.BLACK);
-		btnUpdateCustomer.setForeground(Color.WHITE);
-
-		contentPane.add(btnUpdateCustomer);
-//		 End of update customer button
-
 		JButton btnNewButton_7 = new JButton("Log Out");
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -261,7 +241,7 @@ public class Reception extends JFrame {
 
 			}
 		});
-		btnNewButton_7.setBounds(10, 510, 200, 30);
+		btnNewButton_7.setBounds(10, 470, 200, 30);
 		btnNewButton_7.setBackground(Color.BLACK);
 		btnNewButton_7.setForeground(Color.WHITE);
 
