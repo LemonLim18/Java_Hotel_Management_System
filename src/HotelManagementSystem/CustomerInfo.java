@@ -55,7 +55,7 @@ public class CustomerInfo extends JFrame {
 		//conn = Javaconnect.getDBConnection();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setBounds(200, 100, 1100, 650); // DIMENSION OF WINDOW
+		setBounds(200, 100, 1100, 660); // DIMENSION OF WINDOW
 		setResizable(false); // Make the JFrame non-resizable
 
 		// Load the image
@@ -97,7 +97,7 @@ public class CustomerInfo extends JFrame {
 
 		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
 		componentsPane.setLayout(null);
-		componentsPane.setBounds(90, 65, 932, 490);
+		componentsPane.setBounds(70, 65, 952, 505);
 		// END OF WHITE CONTAINER
 
 		// TABLE INITIALIZATION
@@ -150,7 +150,7 @@ public class CustomerInfo extends JFrame {
 			JScrollPane scrollPane = new JScrollPane(tablePanel);
 
 			// tableDimension
-			scrollPane.setBounds(15, 55, 900, 370);
+			scrollPane.setBounds(25, 60, 900, 370);
 
 			// Add the JScrollPane to the content pane
 			componentsPane.add(scrollPane);
@@ -182,49 +182,49 @@ public class CustomerInfo extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(380, 443, 120, 30);
+		btnExit.setBounds(380, 453, 120, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
 		// END OF RETURN BUTTON
 
 		lblId = new JLabel("ID");
-		lblId.setBounds(65, 23, 44, 14);
+		lblId.setBounds(75, 28, 44, 14);
 		lblId.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblId);
                 
 		JLabel l1 = new JLabel("Number");
-		l1.setBounds(160, 23, 46, 14);
+		l1.setBounds(170, 28, 46, 14);
 		l1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(l1);
 		
 		lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(275, 23, 65, 14);
+		lblNewLabel.setBounds(285, 28, 65, 14);
 		lblNewLabel.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setBounds( 380, 23, 46, 14);
+		lblGender.setBounds( 390, 28, 46, 14);
 		lblGender.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblGender);
 		
 		lblCountry = new JLabel("Country");
-		lblCountry.setBounds(485, 23, 46, 14);
+		lblCountry.setBounds(495, 28, 46, 14);
 		lblCountry.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblCountry);
 		
 		lblRoom = new JLabel("Room");
-		lblRoom.setBounds(605, 23, 46, 14);
+		lblRoom.setBounds(615, 28, 46, 14);
 		lblRoom.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblRoom);
 		
 		lblStatus = new JLabel("Check-in Date");
-		lblStatus.setBounds(695, 23, 100, 14);
+		lblStatus.setBounds(705, 28, 100, 14);
 		lblStatus.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblStatus);
 		
 		lblNewLabel_1 = new JLabel("Deposit");
-		lblNewLabel_1.setBounds(825, 23, 100, 14);
+		lblNewLabel_1.setBounds(835, 28, 100, 14);
 		lblNewLabel_1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel_1);
 
