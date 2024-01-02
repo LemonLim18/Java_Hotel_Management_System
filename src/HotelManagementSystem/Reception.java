@@ -157,7 +157,7 @@ public class Reception extends JFrame {
 
 		contentPane.add(btnNewButton_4);
 		
-		JButton btnNewButton_5 = new JButton("Update Check Status");
+		JButton btnNewButton_5 = new JButton("Customer Status Update");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
