@@ -16,11 +16,11 @@ public class UpdateCheck extends JFrame {
 	Connection conn = null;
 	PreparedStatement pst = null;
 	private JPanel contentPane;
-	private JTextField txt_ID;
-	private JTextField txt_Room;
-	private JTextField txt_Status;
+	private JTextField txt_roomNum;
+//	private JTextField txt_Room;
+	private JTextField txt_Name;
 	private JTextField txt_Date;
-	private JTextField txt_Time;
+	private JTextField txt_Deposit;
 	private JTextField txt_Payment;
 	Choice c1, c2;
 
@@ -43,8 +43,8 @@ public class UpdateCheck extends JFrame {
 	public UpdateCheck() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Beginning of the background image
-		setBounds(530, 200, 850, 630);
+		// Window Dimension
+		setBounds(375, 120, 850, 630);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
@@ -96,7 +96,7 @@ public class UpdateCheck extends JFrame {
 		lblUpdateCheckStatus.setBounds(105, 31, 300, 53);
 		componentsPane.add(lblUpdateCheckStatus);
 		
-		JLabel lblNewLabel = new JLabel("ID:");
+		JLabel lblNewLabel = new JLabel("Customer ID:");
 		lblNewLabel.setBounds(80, 115, 200, 14);
 		componentsPane.add(lblNewLabel);
                 
@@ -104,56 +104,66 @@ public class UpdateCheck extends JFrame {
 		try{
 			conn c = new conn();
 			ResultSet rs = c.s.executeQuery("select * from customer");
+			// list of values
 			while(rs.next()){
-				c1.add(rs.getString("number"));
+				c1.add(rs.getString("number"));  //Import all the values from the database into the list of values
 			}
 		}catch(Exception e){ }
 		c1.setBounds(280, 115, 140, 20);
 		componentsPane.add(c1);
-		
-		JLabel lblNewLabel_1 = new JLabel("Room Number :");
-		lblNewLabel_1.setBounds(80, 159, 107, 14);
-		componentsPane.add(lblNewLabel_1);
-                
-		txt_ID = new JTextField();
-		txt_ID.setBounds(280, 156, 140, 20);
-		txt_ID.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		componentsPane.add(txt_ID);
-		
+
+
 		JLabel lblNewLabel_2 = new JLabel("Name : ");
-		lblNewLabel_2.setBounds(80, 204, 97, 14);
+		lblNewLabel_2.setBounds(80, 159, 97, 14);
 		componentsPane.add(lblNewLabel_2);
-		
+
+		// Customer Name Field
+		txt_Name = new JTextField();
+		txt_Name.setBounds(280, 159, 140, 20);
+		componentsPane.add(txt_Name);
+		txt_Name.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		txt_Name.setColumns(10);
+
+
+		JLabel lblNewLabel_1 = new JLabel("Room Number :");
+		lblNewLabel_1.setBounds(80, 201, 107, 14);
+		componentsPane.add(lblNewLabel_1);
+
+		// Room Number Field
+		txt_roomNum = new JTextField();
+		txt_roomNum.setBounds(280, 201, 140, 20);
+		txt_roomNum.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		componentsPane.add(txt_roomNum);
+
+
 		JLabel lblNewLabel_3 = new JLabel("Checked-in Date :");
 		lblNewLabel_3.setBounds(80, 246, 107, 14);
 		componentsPane.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("Amount Paid (RM) : ");
-		lblNewLabel_4.setBounds(80, 291, 115, 14);
-		componentsPane.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel("Pending Amount (RM) : ");
-		lblNewLabel_5.setBounds(80, 332, 150, 14);
-		componentsPane.add(lblNewLabel_5);
 
-		txt_Status = new JTextField();
-		txt_Status.setBounds(280, 201, 140, 20);
-		componentsPane.add(txt_Status);
-		txt_Status.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Status.setColumns(10);
-		
+		// Checked-In Date Field
 		txt_Date = new JTextField();
 		txt_Date.setBounds(280, 246, 140, 20);
 		componentsPane.add(txt_Date);
 		txt_Date.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		txt_Date.setColumns(10);
-		
-		txt_Time = new JTextField();
-		txt_Time.setBounds(280, 288, 140, 20);
-		componentsPane.add(txt_Time);
-		txt_Time.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Time.setColumns(10);
-		
+
+
+		JLabel lblNewLabel_4 = new JLabel("Amount Paid (RM) : ");
+		lblNewLabel_4.setBounds(80, 291, 115, 14);
+		componentsPane.add(lblNewLabel_4);
+
+		// Amount Paid Field
+		txt_Deposit = new JTextField();
+		txt_Deposit.setBounds(280, 288, 140, 20);
+		componentsPane.add(txt_Deposit);
+		txt_Deposit.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		txt_Deposit.setColumns(10);
+
+		JLabel lblNewLabel_5 = new JLabel("Pending Amount (RM) : ");
+		lblNewLabel_5.setBounds(80, 332, 150, 14);
+		componentsPane.add(lblNewLabel_5);
+
+		// Pending Amount Field
 		txt_Payment = new JTextField();
 		txt_Payment.setBounds(280, 329, 140, 20);
 		componentsPane.add(txt_Payment);
@@ -169,17 +179,38 @@ public class UpdateCheck extends JFrame {
 					conn c = new conn();
                                 
 					String s1 = c1.getSelectedItem();
-					String s2 = txt_ID.getText(); //room_number;
-					String s3 = txt_Status.getText(); //name
-					String s4 = txt_Date.getText(); //status;
-					String s5 = txt_Time.getText(); //deposit
-				
-					c.s.executeUpdate("update customer set room_number = '"+s2+"', name = '"+s3+"', status = '"+s4+"', deposit = '"+s5+"' where number = '"+s1+"'");
-                                
+					String s2 = txt_roomNum.getText(); //s2 is the current latest ROOM NUMBER;
+					String s3 = txt_Name.getText(); //name
+					String s4 = txt_Date.getText(); //Date;
+					String s5 = txt_Deposit.getText(); //deposit
+					String oldRoomNumber="";
+
+					// Retrieve the old room number from the room table
+					ResultSet rs = c.s.executeQuery("SELECT room FROM customer WHERE number = '"+s1+"'");
+					if (rs.next()) {
+						oldRoomNumber = rs.getString(1); // Get the old room number
+					}
+
+					// Customer's room: room
+					// Room's room: roomnumber
+
+					// UPDATE CUSTOMER BOOKING INFO
+					c.s.executeUpdate("update customer set room = '"+s2+"', name = '"+s3+"', checkintime = '"+s4+"', deposit = '"+s5+"' where number = '"+s1+"'");
+
+					// If the room number has changed, set the old room to 'Available' and new room to 'Occupied'
+					if (!oldRoomNumber.equals(s2)) {
+						c.s.executeUpdate("update room set availability = 'Occupied' where roomnumber = '"+s2+"'");
+						c.s.executeUpdate("update room set availability = 'Available' where roomnumber = '"+oldRoomNumber+"'");
+						System.out.println(s2);
+					}else{  //If it's still the same, remain that room status as 'Occupied'
+						c.s.executeUpdate("update room set availability = 'Occupied' where roomnumber = '"+s2+"'");
+					}
+
 					JOptionPane.showMessageDialog(null, "Data Updated Successfully");
 					new Reception().setVisible(true);
 					setVisible(false);
 				}catch(Exception ee){
+					JOptionPane.showMessageDialog(null, "Unexpected Error Occurred. Please try again later.");
 					System.out.println(ee);
 				}
 			}
@@ -240,23 +271,29 @@ public class UpdateCheck extends JFrame {
 					ResultSet rs1 = c.s.executeQuery("select * from customer where number = "+s1);
 
 					while(rs1.next()){
-						txt_ID.setText(rs1.getString("room_number"));
-						txt_Status.setText(rs1.getString("name"));
-						txt_Date.setText(rs1.getString("status"));
-						txt_Time.setText(rs1.getString("deposit"));
+						//columnLabel refers to the column name in the database
+						txt_roomNum.setText(rs1.getString("room"));
+						txt_Name.setText(rs1.getString("name"));
+						txt_Date.setText(rs1.getString("checkintime"));
+						txt_Deposit.setText(rs1.getString("deposit"));
 					}
 				}catch(Exception ignored){}
 
 				try{
 					String total = "";
 					conn c  = new conn();
-					ResultSet rs2 = c.s.executeQuery("select * from room where room_number = " + txt_ID.getText());
+					ResultSet rs2 = c.s.executeQuery("select * from room where roomnumber = " + txt_roomNum.getText());
 					while(rs2.next()){
+						// Price to pay
 						total = rs2.getString("price");
 					}
-					String paid = txt_Time.getText();
-					int pending = Integer.parseInt(total)- Integer.parseInt(paid);
+					// Deposit
+					String paid = txt_Deposit.getText();
+					System.out.println("Paid Amount:"+paid); // For testing purpose
 
+					int pending = Integer.parseInt(total)- Integer.parseInt(paid);
+					System.out.println("Pending Amount:"+pending); // For testing purpose
+					// Remaining to be paid
 					txt_Payment.setText(Integer.toString(pending));
 
 				}catch(Exception ignored){}
@@ -280,7 +317,8 @@ public class UpdateCheck extends JFrame {
 			}
 		});
 		// End of CHECK BUTTON
-                
+
+		// Transfer all the added components back to the contentPane
 		contentPane.add(componentsPane);
 	}
 
