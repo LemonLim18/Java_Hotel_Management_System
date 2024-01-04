@@ -1,166 +1,252 @@
 package HotelManagementSystem;
 
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class AddEmployee extends JFrame{ //Third Frame
-	JTextField textField,textField_1,textField_2,textField_3,textField_4,textField_5,textField_6;
-        JComboBox c1;
+    // Labels for employee details
+    JLabel Name, IC, Age, Phone, Gender, Email, Address, Job, Salary, AddEmployee;
 
-        public AddEmployee(){
-            getContentPane().setForeground(Color.BLUE);
-            getContentPane().setBackground(Color.WHITE);
-            setTitle("ADD EMPLOYEE DETAILS");
-		 
-            setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            setSize(778,486);
-            getContentPane().setLayout(null);
-			
-            JLabel Passportno = new JLabel("NAME");
-            Passportno.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Passportno.setBounds(60, 30, 150, 27);
-            add(Passportno);
-            
-            textField = new JTextField();
-            textField.setBounds(200, 30, 150, 27);
-            add(textField);
-			
-            JButton Next = new JButton("SAVE");
-            Next.setBounds(200, 420, 150, 30);
-            Next.setBackground(Color.BLACK);
-            Next.setForeground(Color.WHITE);
-            add(Next);
-			
-            JLabel Pnrno = new JLabel("AGE");
-            Pnrno.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Pnrno.setBounds(60, 80, 150, 27);
-            add(Pnrno);
-			
-            textField_1 = new JTextField();
-            textField_1.setBounds(200, 80, 150, 27);
-            add(textField_1);
-            
-            JLabel Gender = new JLabel("GENDER");
-            Gender.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Gender.setBounds(60, 120, 150, 27);
-            add(Gender);
-		
-            JRadioButton NewRadioButton = new JRadioButton("MALE");
-            NewRadioButton.setBackground(Color.WHITE);
-            NewRadioButton.setBounds(200, 120, 70, 27);
-            add(NewRadioButton);
-	
-            JRadioButton Female = new JRadioButton("FEMALE");
-            Female.setBackground(Color.WHITE);
-            Female.setBounds(280, 120, 70, 27);
-            add(Female);
+    // TextFields for user input
+    JTextField TFName, TFIC, TFAge, TFPhone, TFEmail, TFAddress, TFSalary;
 
-            JLabel Address = new JLabel("JOB");
-            Address.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Address.setBounds(60, 170, 150, 27);
-            add(Address);
-			
-            String course[] = {"Front Desk Clerks","Porters","Housekeeping","Kitchen Staff","Room Service","Waiter/Waitress","Manager","Accountant","Chef"};
-            c1 = new JComboBox(course);
-            c1.setBackground(Color.WHITE);
-            c1.setBounds(200,170,150,30);
-            add(c1);
-            		
-            JLabel Nationality = new JLabel("SALARY");
-            Nationality.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Nationality.setBounds(60, 220, 150, 27);
-            add(Nationality);
-			
-            textField_3 = new JTextField();
-            textField_3.setBounds(200, 220, 150, 27);
-            add(textField_3);
-	
-            JLabel Name = new JLabel("PHONE");
-            Name.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Name.setBounds(60, 270, 150, 27);
-            add(Name);
-	
-            textField_4 = new JTextField();
-            textField_4.setBounds(200, 270, 150, 27);
-            add(textField_4);
-	
-            JLabel Phno = new JLabel("AADHAR");
-            Phno.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            Phno.setBounds(60, 320, 150, 27);
-            add(Phno);
-			
-            textField_5 = new JTextField();
-            textField_5.setBounds(200, 320, 150, 27);
-            add(textField_5);
-            
-            JLabel email = new JLabel("EMAIL");
-            email.setFont(new Font("Tahoma", Font.PLAIN, 17));
-            email.setBounds(60, 370, 150, 27);
-            add(email);
-			
-            textField_6 = new JTextField();
-            textField_6.setBounds(200, 370, 150, 27);
-            add(textField_6);
-	
-            setVisible(true);
-	
-            JLabel AddPassengers = new JLabel("ADD EMPLOYEE DETAILS");
-            AddPassengers.setForeground(Color.BLUE);
-            AddPassengers.setFont(new Font("Tahoma", Font.PLAIN, 31));
-            AddPassengers.setBounds(450, 24, 442, 35);
-            add(AddPassengers);
-     
-            ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/tenth.jpg"));
-            Image i3 = i1.getImage().getScaledInstance(500, 500,Image.SCALE_DEFAULT);
-            ImageIcon i2 = new ImageIcon(i3);
-            JLabel image = new JLabel(i2);
-            image.setBounds(410,80,480,410);
-            add(image);
-            
-            Next.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae){
-                    String name = textField.getText();
-                    String age = textField_1.getText();
-                    String salary = textField_3.getText();
-                    String phone = textField_4.getText();
-                    String aadhar = textField_5.getText();
-                    String email = textField_6.getText();
-                   
-                    String gender = null;
-                    
-                    if(NewRadioButton.isSelected()){
-                        gender = "male";
-                    
-                    }else if(Female.isSelected()){
-                        gender = "female";
+    // RadioButtons for gender selection
+    JRadioButton RBMale, RBFemale;
+
+    // ButtonGroup for grouping RadioButtons
+    ButtonGroup BG;
+
+    // Button for confirming employee details
+    JButton Confirm;
+
+    // ComboBox for job selection
+    JComboBox CBJob;
+
+    // Constructor for AddEmployee class
+    public AddEmployee() {
+
+        // Set frame properties
+        getContentPane().setBackground(Color.WHITE);
+        setTitle("ADD EMPLOYEE DETAILS");
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setSize(900, 600);
+        getContentPane().setLayout(null);
+
+        // Background panel with an image
+        JPanel background = new JPanel() {
+            protected void paintComponent(Graphics gp) {
+                super.paintComponent(gp);
+                ImageIcon backgroundImage = new ImageIcon(getClass().getClassLoader().getResource("icons/AddEmployee01.jpg"));
+                Image image = backgroundImage.getImage();
+                gp.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        background.setLayout(null);
+        setContentPane(background);
+
+        // Labels and TextFields for employee details
+        Name = new JLabel("<html>NAME <font color='red'>*</font></html>");
+        Name.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Name.setBounds(60, 30, 150, 27);
+        add(Name);
+
+        TFName = new JTextField();
+        TFName.setBounds(200, 30, 150, 27);
+        add(TFName);
+
+        IC = new JLabel("<html>IC <font color='red'>*</font></html>");
+        IC.setFont(new Font("sans serif", Font.PLAIN, 17));
+        IC.setBounds(60, 74, 150, 27);
+        add(IC);
+
+        TFIC = new JTextField();
+        TFIC.setBounds(200, 74, 150, 27);
+        add(TFIC);
+
+        Age = new JLabel("<html>AGE <font color='red'>*</font></html>");
+        Age.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Age.setBounds(60, 118, 150, 27);
+        add(Age);
+
+        TFAge = new JTextField();
+        TFAge.setBounds(200, 118, 150, 27);
+        add(TFAge);
+
+        Phone = new JLabel("<html>PHONE <font color='red'>*</font></html>");
+        Phone.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Phone.setBounds(60, 162, 150, 27);
+        add(Phone);
+
+        TFPhone = new JTextField();
+        TFPhone.setBounds(200, 162, 150, 27);
+        add(TFPhone);
+
+        // RadioButtons and ButtonGroup for gender selection
+        Gender = new JLabel("<html>GENDER <font color='red'>*</font></html>");
+        Gender.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Gender.setBounds(60, 206, 150, 27);
+        add(Gender);
+
+        RBMale = new JRadioButton("MALE");
+        RBMale.setOpaque(false);
+        RBMale.setBounds(200, 206, 70, 27);
+        add(RBMale);
+
+        RBFemale = new JRadioButton("FEMALE");
+        RBFemale.setOpaque(false);
+        RBFemale.setBounds(280, 206, 80, 27);
+        add(RBFemale);
+
+        BG = new ButtonGroup();
+        BG.add(RBMale);
+        BG.add(RBFemale);
+
+        Email = new JLabel("<html>EMAIL <font color='red'>*</font></html>");
+        Email.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Email.setBounds(60, 250, 150, 27);
+        add(Email);
+
+        TFEmail = new JTextField();
+        TFEmail.setBounds(200, 250, 150, 27);
+        add(TFEmail);
+
+        Address = new JLabel("<html>ADDRESS <font color='red'>*</font></html>");
+        Address.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Address.setBounds(60, 294, 150, 27);
+        add(Address);
+
+        TFAddress = new JTextField();
+        TFAddress.setBounds(200, 294, 150, 27);
+        add(TFAddress);
+
+        // ComboBox for job selection
+        Job = new JLabel("<html>JOB <font color='red'>*</font></html>");
+        Job.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Job.setBounds(60, 338, 150, 27);
+        add(Job);
+
+        String course[] = {"Choose a job", "Manager", "Accountant", "Front Desk Clerks", "Porters", "Housekeeping", "Room Service", "Waiter/Waitress", "Chef", "Kitchen Staff", "Maintenance Staff",  "Security Officer"};
+        CBJob = new JComboBox(course);
+        CBJob.setBackground(Color.WHITE);
+        CBJob.setBounds(200,338,150,30);
+        add(CBJob);
+
+        Salary = new JLabel("<html>SALARY (RM) <font color='red'>*</font></html>");
+        Salary.setFont(new Font("sans serif", Font.PLAIN, 17));
+        Salary.setBounds(60, 385, 150, 27);
+        add(Salary);
+
+        TFSalary = new JTextField();
+        TFSalary.setBounds(200, 385, 150, 27);
+        add(TFSalary);
+
+        // Button for confirming employee details
+        Confirm = new JButton("CONFIRM");
+        Confirm.setBounds(200, 455, 150, 30);
+        Confirm.setBackground(Color.BLACK);
+        Confirm.setForeground(Color.WHITE);
+        add(Confirm);
+
+        setVisible(true);
+
+        AddEmployee = new JLabel("ADD EMPLOYEE DETAILS");
+        AddEmployee.setForeground(Color.DARK_GRAY);
+        AddEmployee.setFont(new Font("sans serif", Font.PLAIN, 31));
+        AddEmployee.setBounds(450, 24, 442, 35);
+        add(AddEmployee);
+
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/AddEmployee02.jpg"));
+        Image i3 = i1.getImage().getScaledInstance(400, 400,Image.SCALE_DEFAULT);
+        ImageIcon i2 = new ImageIcon(i3);
+        JLabel image = new JLabel(i2);
+        image.setBounds(410,80,480,410);
+        add(image);
+
+        Confirm.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                String name = TFName.getText();
+                String ic = TFIC.getText();
+                String age = TFAge.getText();
+                String phone = TFPhone.getText();
+
+                String gender = null;
+
+                if(RBMale.isSelected()){
+                    gender = "Male";
+
+                }else if(RBFemale.isSelected()){
+                    gender = "Female";
+                }
+
+                String email = TFEmail.getText();
+                String address = TFAddress.getText();
+                String salary = TFSalary.getText();
+                String job = (String)CBJob.getSelectedItem();
+
+                try {
+                    conn c = new conn();
+
+                    if (name.equals("")){
+                        JOptionPane.showMessageDialog(null, "Name cannot be empty");
+                    }
+                    else if (ic.equals("")) {
+                        JOptionPane.showMessageDialog(null, "IC cannot be empty");
+                    }
+                    else if (ic.length() != 12) {
+                        JOptionPane.showMessageDialog(null, "IC must be 12 digits");
+                    }
+                    else if (age.equals("")) {
+                        JOptionPane.showMessageDialog(null, "Age cannot be empty");
+                    }
+                    else if (age.length()>2) {
+                        JOptionPane.showMessageDialog(null, "Invalid age");
+                    }
+                    else if (phone.equals("")) {
+                        JOptionPane.showMessageDialog(null, "Phone number cannot be empty");
+                    }
+                    else if (phone.length()<9 || phone.length()>11) {
+                        JOptionPane.showMessageDialog(null, "Invalid phone number");
+                    }
+                    else if (!RBMale.isSelected() && !RBFemale.isSelected()) {
+                        JOptionPane.showMessageDialog(null, "Please select a gender");
+                    }
+                    else if (email.equals("")){
+                        JOptionPane.showMessageDialog(null, "Email cannot be empty");
+                    }
+                    else if(!email.contains("@") || !email.contains(".com")){
+                        JOptionPane.showMessageDialog(null, "Invalid email");
+                    }
+                    else if (address.equals("")){
+                        JOptionPane.showMessageDialog(null, "Address cannot be empty");
+                    }
+                    else if (job.equals("Choose a job")) {
+                        JOptionPane.showMessageDialog(null, "Please choose a job");
+                    }
+                    else if (salary.equals("")){
+                        JOptionPane.showMessageDialog(null, "Salary cannot be empty");
+                    }
+                    else {
+                        String data = "INSERT INTO employee values( '" + name + "', '" + ic + "', '" + age + "', '" + phone + "','" + gender + "', '" + email + "', '" + address + "','" + job + "', '" + salary + "')";
+
+                        c.s.executeUpdate(data);
+                        JOptionPane.showMessageDialog(null, "Employee Added Successfully");
+                        setVisible(false);
                     }
 
-                            
-                    String s6 = (String)c1.getSelectedItem();
-                    
-                    try {
-                        conn c = new conn();
-                        String str = "INSERT INTO employee values( '"+name+"', '"+age+"', '"+gender+"','"+s6+"', '"+salary+"', '"+phone+"','"+aadhar+"', '"+email+"')";
-                        
-                        c.s.executeUpdate(str);
-                        JOptionPane.showMessageDialog(null,"Employee Added");
-                        setVisible(false);
-                    
-                    } catch (Exception e) {
-                        e.printStackTrace();
-        	    }
-		}
-            });
-			
-            setSize(900,600);
-            setVisible(true);
-            setLocation(530,200);
-			
-	}
-        
-    public static void main(String[] args){
-            new AddEmployee();
-    }   
+                } catch (Exception e) {
+                    e.printStackTrace();
+            }
+    }
+        });
+
+        setVisible(true);
+        setSize(900,600);
+        setLocation(200,50);
+
+}
+
+public static void main(String[] args){
+        new AddEmployee();
+}
 }

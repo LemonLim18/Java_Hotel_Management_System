@@ -1,99 +1,160 @@
 package HotelManagementSystem;
 
-
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.Objects;
 
 public class Login extends JFrame implements ActionListener{
-    
-    JLabel l1,l2;
-    JTextField t1;
-    JPasswordField t2;
-    JButton b1,b2;
+    JLabel background, label1, label2;
+    JLabel text1, text2, text3, title;
+    JTextField name;
+    JPasswordField passwd;
+    JButton login,cancel;
+    Cursor customCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 
     Login(){
-
-        super("Login");
-
+        super("BLKT2 Hotel Management System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+        setSize(900,600);
+        setLocationRelativeTo(null);
 
-        l1 = new JLabel("Username");
-        l1.setBounds(40,20,100,30);
-        add(l1);
-        
-        l2 = new JLabel("Password");
-        l2.setBounds(40,70,100,30);
-        add(l2);
- 
-        t1=new JTextField();
-        t1.setBounds(150,20,150,30);
-        add(t1);
+        label1 = new JLabel("");
+        label1.setBounds(100,100,700,400);
+        label1.setBackground(Color.white);
+        label1.setOpaque(true);
 
-        t2=new JPasswordField();
-        t2.setBounds(150,70,150,30);
-        add(t2);
-        
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/second.jpg"));
-        Image i2 = i1.getImage().getScaledInstance(200,200,Image.SCALE_DEFAULT);
-        ImageIcon i3 =  new ImageIcon(i2);
-        JLabel l3 = new JLabel(i3);
-        l3.setBounds(350,10,150,150);
-        add(l3);
+        title = new JLabel("Login");
+        title.setBounds(130,50,150,30);
+        title.setFont(new Font("SansSerif",Font.BOLD,25));
+        label1.add(title);
 
+        text1 = new JLabel("Username");
+        text1.setBounds(30,100,150,30);
+        text1.setFont(new Font("SansSerif",Font.BOLD,15));
+        label1.add(text1);
 
-        b1 = new JButton("Login");
-        b1.setBounds(40,140,120,30);
-        b1.setFont(new Font("serif",Font.BOLD,15));
-        b1.addActionListener(this);
-        b1.setBackground(Color.BLACK);
-        b1.setForeground(Color.WHITE);
-        add(b1);
+        text2 = new JLabel("Password");
+        text2.setBounds(30,150,150,30);
+        text2.setFont(new Font("SansSerif",Font.BOLD,15));
+        label1.add(text2);
 
-        b2=new JButton("Cancel");
-        b2.setBounds(180,140,120,30);
-        b2.setFont(new Font("serif",Font.BOLD,15));
-        b2.setBackground(Color.BLACK);
-        b2.setForeground(Color.WHITE);
-        add(b2);
+        text3 = new JLabel("© 2023 BKLT2 Login Form. All rights reserved | Design by Group 18");
+        text3.setBounds(40,350, 300, 30);
+        text3.setFont(new Font("SansSerif",Font.BOLD,8));
+        label1.add(text3);
 
-        b2.addActionListener(this);
-        
-        
-        getContentPane().setBackground(Color.WHITE);
+        name = new JTextField();
+        name.setBounds(150,100,150,30);
+        label1.add(name);
 
+        passwd = new JPasswordField();
+        passwd.setBounds(150,150,150,30);
+        label1.add(passwd);
+
+        login = new JButton("Login");
+        login.setBounds(50,210,100,30);
+        login.setFont(new Font("SansSerif",Font.BOLD,12));
+        login.addActionListener(this);
+        login.setBackground(Color.BLACK);
+        login.setForeground(Color.WHITE);
+        login.setFocusPainted(false);
+        login.setBorder(null);
+        login.setCursor(customCursor);
+        label1.add(login);
+
+        login.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                login.setBackground(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                login.setBackground(Color.BLACK);
+            }
+        });
+
+        cancel = new JButton("Cancel");
+        cancel.setBounds(200,210,100,30);
+        cancel.setFont(new Font("SansSerif",Font.BOLD,12));
+        cancel.setBackground(Color.BLACK);
+        cancel.setForeground(Color.WHITE);
+        cancel.setFocusPainted(false);
+        cancel.setBorder(null);
+        cancel.addActionListener(this);
+        cancel.setCursor(customCursor);
+        label1.add(cancel);
+
+        cancel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cancel.setBackground(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cancel.setBackground(Color.BLACK);
+            }
+        });
+
+        label2 = new JLabel("");
+        ImageIcon icon02 = new ImageIcon(ClassLoader.getSystemResource("icons/login01.jpg"));
+        Image getImage02 = icon02.getImage().getScaledInstance(350,400, Image.SCALE_SMOOTH);
+        ImageIcon image02 =  new ImageIcon(getImage02);
+        label2 = new JLabel(image02);
+        label2.setBounds(350,0,350,400);
+        label1.add(label2);
+
+        background = new JLabel("");
+        ImageIcon icon01  = new ImageIcon(ClassLoader.getSystemResource("icons/login02.png"));
+        Image getImage01 = icon01.getImage().getScaledInstance(900,600, Image.SCALE_SMOOTH);
+        ImageIcon image01 = new ImageIcon(getImage01);
+        background = new JLabel(image01);
+        background.setBounds(0,0,900,600);
+
+        getContentPane().add(label1);
+        getContentPane().add(background);
+
+        setResizable(false);
         setVisible(true);
-        setSize(600,300);
-        setLocation(600,350);
-
     }
 
-    public void actionPerformed(ActionEvent ae){
-        if(ae.getSource()==b1){
+    public void actionPerformed(ActionEvent action){
+        if(action.getSource()==login){
         try{
             conn c1 = new conn();
-            String u = t1.getText();
-            String v = t2.getText();
-            
-            String q = "select * from login where username='"+u+"' and password='"+v+"'";
-            
-            ResultSet rs = c1.s.executeQuery(q); 
-            if(rs.next()){ 
+            String u = name.getText();
+            String v = passwd.getText();
+
+            if(Objects.equals(u, "admin") && Objects.equals(v, "12345")){
                 new Dashboard().setVisible(true);
                 setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(null, "Invalid login");
-                setVisible(false);
+            } else {
+                String q = "SELECT * FROM login WHERE username='"+u+"' AND password='"+v+"'";
+
+                ResultSet rs = c1.s.executeQuery(q);
+
+                if(rs.next()){
+                    new Reception().setVisible(true);
+                    setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Invalid login");
+                    new Login().setVisible(true);
+                    setVisible(false);
+                }
             }
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(Exception ignored){
+
         }
-        }else if(ae.getSource()==b2){
-            System.exit(0);
+        }else if(action.getSource()==cancel){
+            new HotelManagementSystem().setVisible(true);
+            setVisible(false);
         }
     }
-    public static void main(String[] arg){
+    public static void main(String[] args){
         new Login();
     }
 }

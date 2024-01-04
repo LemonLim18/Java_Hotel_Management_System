@@ -8,7 +8,7 @@ public class conn{
     public conn(){  
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");
-            c =DriverManager.getConnection("jdbc:mysql:///hotelmanagementsystem","root","123456");
+            c =DriverManager.getConnection("jdbc:mysql:///hotelmanagementsystem","root","admin123");
             
             s =c.createStatement();
         }catch(Exception e){ 
