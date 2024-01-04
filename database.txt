@@ -1,0 +1,98 @@
+create database hotelmanagementsystem;
+
+show databases;
+
+use hotelmanagementsystem;
+
+ 
+create table login(username varchar(25), password varchar(25));
+insert into login values('admin', '12345');
+select * from login;
+
+
+create table employee(name varchar(25), age varchar(10), gender varchar(15), job varchar(30), salary varchar(15), phone varchar(15), email varchar(40), aadhar varchar(20));
+describe employee;
+select * from employee;
+
+
+create table room(
+	roomnumber varchar(10),
+    availability varchar(20), 
+    cleaning_status varchar(20), 
+    price varchar(20), 
+    bed_type varchar(20)
+);
+select * from room;
+INSERT INTO hotelmanagementsystem.room (roomnumber, availability, cleaning_status, price, bed_type) 
+VALUES 
+(100, 'Available', 'Cleaned', 100, 'Single Bed'),
+(101, 'Available', 'Cleaned', 100, 'Single Bed'),
+(102, 'Available', 'Cleaned', 100, 'Single Bed'),
+(200, 'Available', 'Cleaned', 200, 'Double Bed'),
+(201, 'Available', 'Cleaned', 200, 'Double Bed'),
+(202, 'Available', 'Cleaned', 200, 'Double Bed'),
+(300, 'Available', 'Cleaned', 300, 'Queen Bed'),
+(301, 'Available', 'Cleaned', 300, 'Queen Bed'),
+(302, 'Available', 'Cleaned', 300, 'Queen Bed'),
+(400, 'Available', 'Cleaned', 400, 'King Bed'),
+(401, 'Available', 'Cleaned', 400, 'King Bed'),
+(403, 'Available', 'Cleaned', 400, 'King Bed');
+
+ALTER TABLE room
+MODIFY roomnumber varchar(10) NOT NULL,
+MODIFY availability varchar(20) NOT NULL,
+MODIFY cleaning_status varchar(20) NOT NULL,
+MODIFY price varchar(20) NOT NULL,
+MODIFY bed_type varchar(20) NOT NULL;
+
+alter table room add constraint roomNumberPK PRIMARY KEY(roomnumber);
+
+
+create table driver(name varchar(20), age varchar(10), gender varchar(15), company varchar(20), branch varchar(20), available varchar(20), location varchar(40));
+select * from driver;
+ALTER TABLE driver RENAME COLUMN bracustomercustomernch TO brand;
+
+
+create table customer(
+	document varchar(20), 
+	number varchar(30), 
+	name varchar(30), 
+	gender varchar(15), 
+	country varchar(20), 
+	room varchar(10), 
+	checkintime varchar(80), 
+	deposit varchar(20)
+);
+
+alter table customer 
+add pending integer;
+
+
+alter table customer
+add constraint customerPK PRIMARY KEY(number);
+
+ALTER TABLE customer
+MODIFY document varchar(20) NOT NULL,
+MODIFY number varchar(30) NOT NULL,
+MODIFY name varchar(30) NOT NULL,
+MODIFY gender varchar(15) NOT NULL,
+MODIFY country varchar(20) NOT NULL,
+MODIFY room varchar(10) NOT NULL,
+MODIFY checkintime varchar(80) NOT NULL,
+MODIFY deposit varchar(20) NOT NULL;
+
+select * from customer;
+
+
+ALTER TABLE CUSTOMER
+ADD CONSTRAINT fk_room
+FOREIGN KEY (room) REFERENCES ROOM(roomnumber);
+
+
+create table department(department varchar(30), budget varchar(30));
+insert into department values('Front Office','500000');
+insert into department values('Housekeeping', '40000');
+insert into department values('Food and Beverage', '23000');
+insert into department values('Kitchen or Food Production', '540000');
+insert into department values('Security', '320000');
+select * from department;
