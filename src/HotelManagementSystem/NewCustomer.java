@@ -87,7 +87,7 @@ public class NewCustomer extends JFrame {
 		lblName.setBounds(170, 11, 280, 53);
 		componentsPane.add(lblName);
 
-		JLabel lblId = new JLabel("ID Document :");
+		JLabel lblId = new JLabel("<html>ID Document <span style='color:red;'>*</span></html>");
 		lblId.setBounds(80, 76, 200, 14);
 		componentsPane.add(lblId);
 
@@ -96,29 +96,53 @@ public class NewCustomer extends JFrame {
 		comboBox.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(comboBox);
 
-		JLabel l2 = new JLabel("Customer ID :");
-		l2.setBounds(80, 111, 200, 14);
+		JLabel l2 = new JLabel("<html>Customer ID <span style='color:red;'>*</span></html>");
+		l2.setBounds(80, 115, 200, 14);
 		componentsPane.add(l2);
 
-		//	Number
+		//	ID NUMBER
+//		try{
+//			conn c = new conn();
+//			ResultSet rs3 = c.s.executeQuery("SELECT MAX(number) as max_number FROM customer");
+//			int nextNumber=0;
+//			// If there is a row inside the table
+//			if(rs3.next()) {
+//				// get the maximum number from the data
+//				int maxNumber = rs3.getInt("max_number");
+//				// say if there is no number or null or 0 in the data
+//				if (maxNumber == 0) {
+//					nextNumber = 1000; // Default value will be 1000 if no customers exist yet
+//				} else {
+//					// else the number will continue after the last number
+//					nextNumber = rs3.getInt("max_number") + 1;
+//				}
+//			}
+//			System.out.println(nextNumber);
+//			t1 = new JTextField(String.valueOf(nextNumber));
+//			t1.setBounds(280, 111, 150, 20);
+//			componentsPane.add(t1);
+//			t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//			t1.setColumns(10);
+//		}catch(Exception ignored){ }
+
 		t1 = new JTextField();
 		t1.setBounds(280, 111, 150, 20);
 		componentsPane.add(t1);
 		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t1.setColumns(10);
 
-		JLabel lblName_1 = new JLabel("Name :");
+		JLabel lblName_1 = new JLabel("<html>Name <span style='color:red;'>*</span></html>");
 		lblName_1.setBounds(80, 151, 200, 14);
 		componentsPane.add(lblName_1);
 
-		//	Name
+		//	NAME
 		t2 = new JTextField();
 		t2.setBounds(280, 151, 150, 20);
 		componentsPane.add(t2);
 		t2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t2.setColumns(10);
 
-		JLabel lblGender = new JLabel("Gender :");
+		JLabel lblGender = new JLabel("<html>Gender <span style='color:red;'>*</span></html>");
 		lblGender.setBounds(80, 191, 200, 14);
 		componentsPane.add(lblGender);
 
@@ -145,11 +169,11 @@ public class NewCustomer extends JFrame {
 		bg.add(r1);
 		bg.add(r2);
 
-		JLabel lblCountry = new JLabel("Country :");
+		JLabel lblCountry = new JLabel("<html>Country <span style='color:red;'>*</span></html>");
 		lblCountry.setBounds(80, 231, 200, 14);
 		componentsPane.add(lblCountry);
 
-		JLabel lblReserveRoomNumber = new JLabel("Allocated Room Number :");
+		JLabel lblReserveRoomNumber = new JLabel("<html>Allocated Room Number <span style='color:red;'>*</span></html>");
 		lblReserveRoomNumber.setBounds(80, 274, 200, 14);
 		lblReserveRoomNumber.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(lblReserveRoomNumber);
@@ -157,7 +181,7 @@ public class NewCustomer extends JFrame {
 		c1 = new Choice();
 		try{
 			conn c = new conn();
-			ResultSet rs = c.s.executeQuery("select * from room");
+			ResultSet rs = c.s.executeQuery("select * from room where availability='Available'");
 			while(rs.next()){
 				c1.add(rs.getString("roomnumber"));
 			}
@@ -166,11 +190,11 @@ public class NewCustomer extends JFrame {
 		c1.setBounds(280, 274, 150, 20);
 		componentsPane.add(c1);
 
-		JLabel lblCheckInStatus = new JLabel("Check-In Date :");
+		JLabel lblCheckInStatus = new JLabel("<html>Check-In Date <span style='color:red;'>*</span></html>");
 		lblCheckInStatus.setBounds(80, 316, 200, 14);
 		componentsPane.add(lblCheckInStatus);
 
-		JLabel lblDeposit = new JLabel("Deposit (RM) :");
+		JLabel lblDeposit = new JLabel("<html>Deposit (RM) <span style='color:red;'>*</span></html>");
 		lblDeposit.setBounds(80, 359, 200, 14);
 		componentsPane.add(lblDeposit);
 
@@ -274,7 +298,6 @@ public class NewCustomer extends JFrame {
 					return;
 				}
 
-
 				// Establish connection with the database server
 				conn c = new conn();
 				String radio = null;
@@ -294,14 +317,26 @@ public class NewCustomer extends JFrame {
 					String s5 =  t3.getText();
 					String s7 =  t5.getText();
 					String s8 =  t6.getText();
-					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
+					ResultSet rs5 = c.s.executeQuery("select * from room where roomnumber='"+s6+"'");
+					String roomPrice = null;
+					if(rs5.next()) {
+						roomPrice = rs5.getString("price");
+					}
+					int pending = 0;
+					pending = Integer.parseInt(roomPrice)- Integer.parseInt(s8);
+
+
+					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"','" +pending+"')"; // the last redundant s8 is for pending initialization
 					String q2 = "update room set availability = 'Occupied' where roomnumber = "+s6;
 					c.s.executeUpdate(q1);
 					c.s.executeUpdate(q2);
 
+					System.out.println(pending);
+
 					JOptionPane.showMessageDialog(null, "Data Inserted Successfully");
 					new Reception().setVisible(true);
 					setVisible(false);
+
 				}catch(SQLException e1){
 					System.out.println(e1.getMessage());
 				}
@@ -309,6 +344,7 @@ public class NewCustomer extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please enter a valid Number");
 				}
 			}
+
 		});
 
 		btnNewButton.setBounds(110, 415, 125, 30);
