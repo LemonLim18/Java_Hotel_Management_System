@@ -188,13 +188,13 @@ public class CustomerInfo extends JFrame {
 		componentsPane.add(btnExit);
 		// END OF RETURN BUTTON
 
-		lblId = new JLabel("ID");
-		lblId.setBounds(75, 28, 44, 14);
+		lblId = new JLabel("ID Document");
+		lblId.setBounds(45, 28, 105, 14);
 		lblId.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblId);
                 
-		JLabel l1 = new JLabel("Number");
-		l1.setBounds(170, 28, 46, 14);
+		JLabel l1 = new JLabel("Customer ID");
+		l1.setBounds(155, 28, 100, 14);
 		l1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(l1);
 		

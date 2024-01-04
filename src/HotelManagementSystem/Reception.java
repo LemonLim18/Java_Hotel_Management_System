@@ -138,7 +138,7 @@ public class Reception extends JFrame {
 
 		contentPane.add(btnManagerInfo);
 		
-		JButton btnNewButton_4 = new JButton("Check Out");
+		JButton btnNewButton_4 = new JButton("Customer Check Out");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CheckOut check;

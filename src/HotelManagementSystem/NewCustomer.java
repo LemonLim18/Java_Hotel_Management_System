@@ -87,7 +87,7 @@ public class NewCustomer extends JFrame {
 		lblName.setBounds(170, 11, 280, 53);
 		componentsPane.add(lblName);
 
-		JLabel lblId = new JLabel("ID :");
+		JLabel lblId = new JLabel("ID Document :");
 		lblId.setBounds(80, 76, 200, 14);
 		componentsPane.add(lblId);
 
@@ -96,7 +96,7 @@ public class NewCustomer extends JFrame {
 		comboBox.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(comboBox);
 
-		JLabel l2 = new JLabel("Number :");
+		JLabel l2 = new JLabel("Customer ID :");
 		l2.setBounds(80, 111, 200, 14);
 		componentsPane.add(l2);
 

@@ -35,29 +35,67 @@ public class CheckOut extends JFrame{
 		this.dispose();
 	}
 
+	// CheckOut MAIN FUNCTION
 	public CheckOut() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(530, 200, 800, 294);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		// Window Dimension
+		setBounds(375, 150, 800, 545);
+
+		// Make the JFrame non-resizable
+		setResizable(false);
+
+		// Load the background image
+		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/sunset.jpg"));
+		Image i3 = i1.getImage().getScaledInstance(800, 550,Image.SCALE_DEFAULT);
+		ImageIcon i2 = new ImageIcon(i3);
+
+		// Create a new JPanel with overridden paintComponent method
+		contentPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				// Draw the image on the panel
+				g.drawImage(i2.getImage(), 0, 0, this);
+			}
+		};
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-                
-		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/sixth.jpg"));
-		Image i3 = i1.getImage().getScaledInstance(400, 225,Image.SCALE_DEFAULT);
-		ImageIcon i2 = new ImageIcon(i3);
-		JLabel l1 = new JLabel(i2);
-		l1.setBounds(300,0,500,225);
-		add(l1);
+// End of the background image
+
+		// WHITE CONTAINER
+		// Set the border radius to the white container
+		JPanel componentsPane = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				if (!(g instanceof Graphics2D)) {
+					return;
+				}
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// Set the white background to translucent
+				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 45, 45);
+				super.paintComponent(g);
+			}
+		};
+		componentsPane.setOpaque(false);
+
+		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
+		componentsPane.setLayout(null);
+		componentsPane.setBounds(150, 85, 500, 320);
+		// END OF WHITE CONTAINER
+		// END OF WHITE CONTAINER
+
+		JLabel lblCheckOut = new JLabel("CUSTOMER CHECK-OUT");
+		lblCheckOut.setFont(new Font("Rambla", Font.BOLD, 20));
+		lblCheckOut.setBounds(135, 35, 250, 35);
+		componentsPane.add(lblCheckOut);
 		
-		JLabel lblCheckOut = new JLabel("Check Out ");
-		lblCheckOut.setFont(new Font("Rambla", Font.PLAIN, 20));
-		lblCheckOut.setBounds(70, 11, 140, 35);
-		contentPane.add(lblCheckOut);
-		
-		JLabel lblName = new JLabel("Number :");
-		lblName.setBounds(20, 85, 80, 14);
-		contentPane.add(lblName);
+		JLabel lblName = new JLabel("Customer ID :");
+		lblName.setBounds(80, 105, 80, 14);
+		componentsPane.add(lblName);
                 
 		c1 = new Choice();
 		try{
@@ -67,48 +105,55 @@ public class CheckOut extends JFrame{
 				c1.add(rs.getString("number"));
 			}
 		}catch(Exception e){ }
-		c1.setBounds(130, 82, 150, 20);
-		contentPane.add(c1);
-                
-		ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/tick.png"));
-		Image i5 = i4.getImage().getScaledInstance(20, 20,Image.SCALE_DEFAULT);
-		ImageIcon i6 = new ImageIcon(i5);
-		JButton l2 = new JButton(i6);
-		l2.setBounds(290,82,20,20);
-		add(l2);
-                
+		c1.setBounds(250, 105, 156, 20);
+		componentsPane.add(c1);
+
+		JButton l2 = new JButton("🔍");
+		l2.setBounds(416,150,46,20);
+		componentsPane.add(l2);
+
 		l2.addActionListener(new ActionListener(){
-                    
+
 			public void actionPerformed(ActionEvent ae){
 				try{
-                            
 					conn c = new conn();
 					String number = c1.getSelectedItem();
 					ResultSet rs = c.s.executeQuery("select * from customer where number = "+number);
-                            
+
 					if(rs.next()){
 						System.out.println("clicked");
-						t1.setText(rs.getString("room_number"));
+						t1.setText(rs.getString("room"));
 					}
 				}catch(Exception e){ }
 			}
 		});
 
 		JLabel lblRoomNumber = new JLabel("Room Number:");
-		lblRoomNumber.setBounds(20, 132, 86, 20);
-		contentPane.add(lblRoomNumber);
-		
+		lblRoomNumber.setBounds(80, 150, 86, 20);
+		componentsPane.add(lblRoomNumber);
+
+
 		t1 = new JTextField();
-		t1.setBounds(130, 132, 150, 20);
-		contentPane.add(t1);
+		t1.setBounds(250, 150, 156, 20);
+		componentsPane.add(t1);
+		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		t1.setColumns(10);
 
 		JButton btnCheckOut = new JButton("Check Out");
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id = c1.getSelectedItem();
-				String s1 = t1.getText();
-				String deleteSQL = "Delete from customer where number = "+id;
-				String q2 = "update room set availability = 'Available' where room_number = "+s1;
+				String id = c1.getSelectedItem(); //Customer ID
+				String s1 = t1.getText(); //Room Number
+
+				if (s1.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Please click the search button to get the customer's room number.");
+					return;
+				}
+
+				// Remove the customer from the CUSTOMER TABLE
+				String deleteSQL = "Delete from customer where number = '"+id+"'";
+				// Update the room status back to AVAILABLE
+				String q2 = "update room set availability = 'Available' where roomnumber = '"+s1+"'";
 
 				conn c = new conn();
 
@@ -123,10 +168,24 @@ public class CheckOut extends JFrame{
 	    		}
 			}
 		});
-		btnCheckOut.setBounds(50, 200, 100, 25);
+		btnCheckOut.setBounds(110, 223, 125, 30);
 		btnCheckOut.setBackground(Color.BLACK);
 		btnCheckOut.setForeground(Color.WHITE);
-		contentPane.add(btnCheckOut);
+		componentsPane.add(btnCheckOut);
+
+		// Hover Effect for Button
+		btnCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnCheckOut.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnCheckOut.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnCheckOut.setBackground(Color.BLACK); // Original color of background
+				btnCheckOut.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		// Hover Effect for Button
 		
 		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
@@ -135,12 +194,27 @@ public class CheckOut extends JFrame{
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(160, 200, 100, 25);
+		btnExit.setBounds(270, 223, 125, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
-		contentPane.add(btnExit);
+		componentsPane.add(btnExit);
 
-		getContentPane().setBackground(Color.WHITE);
+		// Hover Effect for Button
+		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnExit.setBackground(Color.BLACK); // Original color of background
+				btnExit.setForeground(Color.WHITE); // Original color of font
+			}
+		});
+		// Hover Effect for Button
+
+		// Add the componentsPane(that contains all the components) to the contentPane
+		contentPane.add(componentsPane);
 	}
 
 }
