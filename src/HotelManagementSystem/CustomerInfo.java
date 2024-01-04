@@ -150,7 +150,7 @@ public class CustomerInfo extends JFrame {
 			JScrollPane scrollPane = new JScrollPane(tablePanel);
 
 			// tableDimension
-			scrollPane.setBounds(25, 60, 900, 370);
+			scrollPane.setBounds(38, 65, 875, 370);
 
 			// Add the JScrollPane to the content pane
 			componentsPane.add(scrollPane);
@@ -189,42 +189,47 @@ public class CustomerInfo extends JFrame {
 		// END OF RETURN BUTTON
 
 		lblId = new JLabel("ID Document");
-		lblId.setBounds(45, 28, 105, 14);
+		lblId.setBounds(53, 28, 105, 14);
 		lblId.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblId);
                 
 		JLabel l1 = new JLabel("Customer ID");
-		l1.setBounds(155, 28, 100, 14);
+		l1.setBounds(153, 28, 100, 14);
 		l1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(l1);
 		
 		lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(285, 28, 65, 14);
+		lblNewLabel.setBounds(263, 28, 65, 14);
 		lblNewLabel.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setBounds( 390, 28, 46, 14);
+		lblGender.setBounds( 355, 28, 46, 14);
 		lblGender.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblGender);
 		
 		lblCountry = new JLabel("Country");
-		lblCountry.setBounds(495, 28, 46, 14);
+		lblCountry.setBounds(450, 28, 46, 14);
 		lblCountry.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblCountry);
 		
 		lblRoom = new JLabel("Room");
-		lblRoom.setBounds(615, 28, 46, 14);
+		lblRoom.setBounds(555, 28, 46, 14);
 		lblRoom.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblRoom);
 		
 		lblStatus = new JLabel("Check-in Date");
-		lblStatus.setBounds(705, 28, 100, 14);
+		lblStatus.setBounds(628, 28, 100, 14);
 		lblStatus.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblStatus);
 		
-		lblNewLabel_1 = new JLabel("Deposit");
-		lblNewLabel_1.setBounds(835, 28, 100, 14);
+		lblNewLabel_1 = new JLabel("Deposit Amt.");
+		lblNewLabel_1.setBounds(733, 28, 100, 14);
+		lblNewLabel_1.setForeground(new Color(72, 41, 245));
+		componentsPane.add(lblNewLabel_1);
+
+		lblNewLabel_1 = new JLabel("Pending Amt.");
+		lblNewLabel_1.setBounds(825, 28, 100, 14);
 		lblNewLabel_1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel_1);
 
