@@ -93,7 +93,7 @@ public class CheckOut extends JFrame{
 		lblCheckOut.setBounds(135, 35, 250, 35);
 		componentsPane.add(lblCheckOut);
 		
-		JLabel lblName = new JLabel("Customer ID :");
+		JLabel lblName = new JLabel("<html>Customer ID <span style='color:red;'>*</span></html>");
 		lblName.setBounds(80, 105, 80, 14);
 		componentsPane.add(lblName);
                 
@@ -128,8 +128,8 @@ public class CheckOut extends JFrame{
 			}
 		});
 
-		JLabel lblRoomNumber = new JLabel("Room Number:");
-		lblRoomNumber.setBounds(80, 150, 86, 20);
+		JLabel lblRoomNumber = new JLabel("<html>Room Number <span style='color:red;'>*</span></html>");
+		lblRoomNumber.setBounds(80, 150, 100, 20);
 		componentsPane.add(lblRoomNumber);
 
 
@@ -139,33 +139,60 @@ public class CheckOut extends JFrame{
 		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t1.setColumns(10);
 
+		// CHECK OUT
 		JButton btnCheckOut = new JButton("Check Out");
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = c1.getSelectedItem(); //Customer ID
-				String s1 = t1.getText(); //Room Number
+				String roomNum = t1.getText(); //Room Number
 
-				if (s1.trim().isEmpty()) {
+				if (roomNum.trim().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Please click the search button to get the customer's room number.");
 					return;
 				}
 
-				// Remove the customer from the CUSTOMER TABLE
-				String deleteSQL = "Delete from customer where number = '"+id+"'";
-				// Update the room status back to AVAILABLE
-				String q2 = "update room set availability = 'Available' where roomnumber = '"+s1+"'";
-
+				// Establish a connection
+				String pendingAmt = null;
+				boolean checkoutAllowed = false;
 				conn c = new conn();
 
-	    		try{
-	    			c.s.executeUpdate(deleteSQL);
-	    			c.s.executeUpdate(q2);
-	    			JOptionPane.showMessageDialog(null, "Check Out Successful");
-	    			new Reception().setVisible(true);
-					setVisible(false);
-	    		}catch(SQLException e1){
-	    			System.out.println(e1.getMessage());
-	    		}
+				// Retrieve the pending amount of the selected Customer ID
+				try {
+					ResultSet rs5 = c.s.executeQuery("select * from customer where room='"+roomNum+"'");
+					if(rs5.next()) {
+						pendingAmt = rs5.getString("pending");
+					}
+				} catch(SQLException ee) {
+					ee.printStackTrace();
+				}
+				System.out.println(pendingAmt);
+				// Pending amount of the selected customer ID
+
+				if(Integer.parseInt(pendingAmt) <=0 ){
+					checkoutAllowed = true;
+				}else{
+					checkoutAllowed = false;
+				}
+
+				if(checkoutAllowed == true) { // if the customer pays all the amount, then he is free to check out
+					// Remove the customer from the CUSTOMER TABLE
+					String deleteSQL = "Delete from customer where number = '"+id+"'";
+					// Update the room status back to AVAILABLE
+					String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
+
+
+					try{
+						c.s.executeUpdate(deleteSQL);
+						c.s.executeUpdate(q2);
+						JOptionPane.showMessageDialog(null, "Check Out Successful");
+						new Reception().setVisible(true);
+						setVisible(false);
+					}catch(SQLException e1){
+						System.out.println(e1.getMessage());
+					}
+				} else {  // if the customer does not pay the full amount, a pop-up notification would appear
+					JOptionPane.showMessageDialog(null, "Customer has a pending balance of RM" + pendingAmt + ". Please settle this amount before checking out.");
+				}
 			}
 		});
 		btnCheckOut.setBounds(110, 223, 125, 30);
