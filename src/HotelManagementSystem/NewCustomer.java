@@ -9,6 +9,7 @@ import java.sql.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 
 public class NewCustomer extends JFrame {
@@ -35,7 +36,7 @@ public class NewCustomer extends JFrame {
 
 	public NewCustomer() throws SQLException {
 		//	Beginning of the background image
-		setBounds(530, 200, 850, 630);
+		setBounds(340, 115, 850, 630);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
@@ -315,7 +316,7 @@ public class NewCustomer extends JFrame {
 					String s3 =  t2.getText();
 					String s4 =  radio;
 					String s5 =  t3.getText();
-					String s7 =  t5.getText();
+					String s7 =  t5.getText(); // Check-In Date
 					String s8 =  t6.getText();
 					ResultSet rs5 = c.s.executeQuery("select * from room where roomnumber='"+s6+"'");
 
@@ -332,6 +333,11 @@ public class NewCustomer extends JFrame {
 
 				}catch(SQLException e1){
 					System.out.println(e1.getMessage());
+					if(e1.getErrorCode() == 1062) {
+						JOptionPane.showMessageDialog(null, "The Customer ID entered already existed. Please enter another ID");
+					}else {
+						System.out.println(e1.getMessage());
+					}
 				}
 				catch(NumberFormatException s){
 					JOptionPane.showMessageDialog(null, "Please enter a valid Number");

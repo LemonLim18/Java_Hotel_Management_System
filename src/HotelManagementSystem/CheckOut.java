@@ -40,7 +40,7 @@ public class CheckOut extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Window Dimension
-		setBounds(375, 150, 800, 545);
+		setBounds(355, 150, 800, 545);
 
 		// Make the JFrame non-resizable
 		setResizable(false);

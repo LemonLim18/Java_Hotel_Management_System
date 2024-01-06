@@ -17,7 +17,7 @@ import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Vector;
+import net.proteanit.sql.DbUtils;
 
 public class CustomerInfo extends JFrame {
 	Connection conn = null;
@@ -97,69 +97,27 @@ public class CustomerInfo extends JFrame {
 
 		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
 		componentsPane.setLayout(null);
-		componentsPane.setBounds(70, 65, 952, 505);
+		componentsPane.setBounds(105, 65, 870, 505);
 		// END OF WHITE CONTAINER
 
 		// TABLE INITIALIZATION
 		table = new JTable(); //initialize the table for the first use
-		try{
-			conn c  = new conn();
-			String displayCustomersql = "select * from Customer";
-			ResultSet rs = c.s.executeQuery(displayCustomersql);
+		table.setBounds(25, 70, 820, 340);
+		table.setShowGrid(false);
+		table.setRowHeight(25);
+		Color semiTransparentColor = new Color(252, 252, 252, 132);
+		table.setBackground(semiTransparentColor);
+		table.setOpaque(false);
+		Font tableFont = new Font("Sans Serif", Font.PLAIN, 12);
+		table.setFont(tableFont);
+		componentsPane.add(table);
 
-			// Get the ResultSetMetaData
-			ResultSetMetaData metaData = rs.getMetaData();
-			int columnCount = metaData.getColumnCount();
+		conn c = new conn();
+		String displayCustomersql = "select * from customer";
+		ResultSet rs = c.s.executeQuery(displayCustomersql);
+		table.setModel(DbUtils.resultSetToTableModel(rs));
 
-			// Get the column names
-			Vector<String> columnNames = new Vector<String>();
-			for (int column = 1; column <= columnCount; column++) {
-				columnNames.add(metaData.getColumnName(column));
-			}
 
-			// Get the row data
-			Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-			while (rs.next()) {
-				Vector<Object> vector = new Vector<Object>();
-				for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-					vector.add(rs.getObject(columnIndex));
-				}
-				data.add(vector);
-			}
-
-			// Create a DefaultTableModel with the data and column names
-			DefaultTableModel dtm = new DefaultTableModel(data, columnNames) {
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					// This causes all cells to be uneditable
-					return false;
-				}
-			};
-
-			// Set the table model
-			table.setModel(dtm);
-
-			// Hide the table header
-			table.setTableHeader(null);
-
-			// Create a JPanel and add the table to it
-			JPanel tablePanel = new JPanel(new BorderLayout());
-			tablePanel.add(table);
-
-			// Create a JScrollPane for the JPanel
-			JScrollPane scrollPane = new JScrollPane(tablePanel);
-
-			// tableDimension
-			scrollPane.setBounds(38, 65, 875, 370);
-
-			// Add the JScrollPane to the content pane
-			componentsPane.add(scrollPane);
-
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		// END OF INITIALIZATION METHOD/CONSTRUCTOR
 
 
 		// RETURN BUTTON
@@ -189,49 +147,45 @@ public class CustomerInfo extends JFrame {
 		// END OF RETURN BUTTON
 
 		lblId = new JLabel("ID Document");
-		lblId.setBounds(53, 28, 105, 14);
+		lblId.setBounds(40, 32, 105, 14);
 		lblId.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblId);
                 
 		JLabel l1 = new JLabel("Customer ID");
-		l1.setBounds(153, 28, 100, 14);
+		l1.setBounds(145, 32, 100, 14);
 		l1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(l1);
 		
 		lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(263, 28, 65, 14);
+		lblNewLabel.setBounds(263, 32, 65, 14);
 		lblNewLabel.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel);
 		
 		lblGender = new JLabel("Gender");
-		lblGender.setBounds( 355, 28, 46, 14);
+		lblGender.setBounds( 360, 32, 46, 14);
 		lblGender.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblGender);
 		
 		lblCountry = new JLabel("Country");
-		lblCountry.setBounds(450, 28, 46, 14);
+		lblCountry.setBounds(460, 32, 46, 14);
 		lblCountry.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblCountry);
 		
 		lblRoom = new JLabel("Room");
-		lblRoom.setBounds(555, 28, 46, 14);
+		lblRoom.setBounds(570, 32, 46, 14);
 		lblRoom.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblRoom);
 		
 		lblStatus = new JLabel("Check-in Date");
-		lblStatus.setBounds(628, 28, 100, 14);
+		lblStatus.setBounds(648, 32, 100, 14);
 		lblStatus.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblStatus);
 		
 		lblNewLabel_1 = new JLabel("Deposit Amt.");
-		lblNewLabel_1.setBounds(733, 28, 100, 14);
+		lblNewLabel_1.setBounds(755, 32, 100, 14);
 		lblNewLabel_1.setForeground(new Color(72, 41, 245));
 		componentsPane.add(lblNewLabel_1);
 
-		lblNewLabel_1 = new JLabel("Pending Amt.");
-		lblNewLabel_1.setBounds(825, 28, 100, 14);
-		lblNewLabel_1.setForeground(new Color(72, 41, 245));
-		componentsPane.add(lblNewLabel_1);
 
 		// Add all the components that we insert into the componentsPane into the contentPane container
 		contentPane.add(componentsPane);
