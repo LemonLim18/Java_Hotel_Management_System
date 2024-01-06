@@ -21,7 +21,6 @@ public class UpdateCheck extends JFrame {
 	private JTextField txt_Name;
 	private JTextField txt_Date;
 	private JTextField txt_Deposit;
-	private JTextField txt_Pending;
 	private JTextField txt_Pay;
 	Choice c1, c2;
 
@@ -89,7 +88,7 @@ public class UpdateCheck extends JFrame {
 
 		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
 		componentsPane.setLayout(null);
-		componentsPane.setBounds(170, 70, 500 , 470);
+		componentsPane.setBounds(170, 90, 500 , 440);
 
 		// Add the components to the componentsPane instead of the contentPane
 		JLabel lblUpdateCheckStatus = new JLabel("CUSTOMER STATUS UPDATE");
@@ -158,28 +157,16 @@ public class UpdateCheck extends JFrame {
 		txt_Date.setColumns(10);
 
 		// original amount paid
-		JLabel lblNewLabel_4 = new JLabel("<html>Pending Amt (RM) <span style='color:red;'>*</span></html>");
+		JLabel lblNewLabel_4 = new JLabel("<html>Deposit (RM) <span style='color:red;'>*</span></html>");
 		lblNewLabel_4.setBounds(80, 291, 115, 14);
 		componentsPane.add(lblNewLabel_4);
 
-		// original Amount Paid Field
-		txt_Pending = new JTextField();
-		txt_Pending.setBounds(280, 288, 140, 20);
-		componentsPane.add(txt_Pending);
-		txt_Pending.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Pending.setColumns(10);
-
-		// original pending amount
-		JLabel lblNewLabel_5 = new JLabel("<html>Current Pay Amt (RM) <span style='color:red;'>*</span></html>");
-		lblNewLabel_5.setBounds(80, 332, 150, 14);
-		componentsPane.add(lblNewLabel_5);
-
-		// original Pending Amount Field
-		txt_Pay = new JTextField();
-		txt_Pay.setBounds(280, 329, 140, 20);
-		componentsPane.add(txt_Pay);
-		txt_Pay.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Pay.setColumns(10);
+		// original Deposit Field
+		txt_Deposit = new JTextField();
+		txt_Deposit.setBounds(280, 288, 140, 20);
+		componentsPane.add(txt_Deposit);
+		txt_Deposit.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		txt_Deposit.setColumns(10);
 
 		// Beginning of UPDATE BUTTON
 		JButton btnUpdate = new JButton("Update");
@@ -193,7 +180,7 @@ public class UpdateCheck extends JFrame {
 					String s2 = choice_roomNum.getSelectedItem(); //s2 is the current latest ROOM NUMBER;
 					String s3 = txt_Name.getText(); //Name
 					String s4 = txt_Date.getText(); //Date;
-					String s5 = txt_Pending.getText(); //Pending
+					String s5 = txt_Deposit.getText(); //Deposit
 					String s6 = txt_Pay.getText(); //Current Pay Amount
 					String oldRoomNumber="";
 
@@ -234,7 +221,7 @@ public class UpdateCheck extends JFrame {
 				}
 			}
 		});
-		btnUpdate.setBounds(207, 398, 89, 30);
+		btnUpdate.setBounds(207, 363, 89, 30);
 		btnUpdate.setBackground(Color.BLACK);
 		btnUpdate.setForeground(Color.WHITE);
 		componentsPane.add(btnUpdate);
@@ -261,7 +248,7 @@ public class UpdateCheck extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(319, 398, 89, 30);
+		btnExit.setBounds(324, 363, 89, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
@@ -309,36 +296,13 @@ public class UpdateCheck extends JFrame {
 						choice_roomNum.select(room);
 						txt_Name.setText(rs1.getString("name"));
 						txt_Date.setText(rs1.getString("checkintime"));
-//						txt_Deposit.setText(rs1.getString("deposit"));  // Disable it cuz the CURRENT PAY TEXT FIELD IS NOW BLANK
+						txt_Deposit.setText(rs1.getString("deposit"));  // Disable it cuz the CURRENT PAY TEXT FIELD IS NOW BLANK
 					}
-				}catch(Exception ignored){}
-
-				try{
-					String pending = "";
-					conn c  = new conn();
-					ResultSet rs2 = c.s.executeQuery("select * from customer where room = " + choice_roomNum.getSelectedItem());
-					while(rs2.next()){
-						// Price to pay
-						pending = rs2.getString("pending");
-					}
-
-  					int pendingInt = Integer.parseInt(pending);
-					boolean fullPayStatus = false;
-					if(pendingInt<=0) {
-						fullPayStatus = true; //if there's no remaining amount, fullPay is true
-						pendingInt = 0; // if the customer gives more than what they pay make it zero too
-					} else {
-						fullPayStatus = false; // if there's still remaining amount, fullPay is false
-					}
-					System.out.println("Pending Amount:"+pendingInt); // For testing purpose
-					// Remaining to be paid
-					txt_Pending.setText(Integer.toString(pendingInt));
-
 				}catch(Exception ignored){}
 			}
 		});
 
-		btnAdd.setBounds(95, 398, 89, 30);
+		btnAdd.setBounds(90, 363, 89, 30);
 		btnAdd.setBackground(Color.BLACK);
 		btnAdd.setForeground(Color.WHITE);
 		componentsPane.add(btnAdd);

@@ -318,22 +318,15 @@ public class NewCustomer extends JFrame {
 					String s7 =  t5.getText();
 					String s8 =  t6.getText();
 					ResultSet rs5 = c.s.executeQuery("select * from room where roomnumber='"+s6+"'");
-					String roomPrice = null;
-					if(rs5.next()) {
-						roomPrice = rs5.getString("price");
-					}
-					int pending = 0;
-					pending = Integer.parseInt(roomPrice)- Integer.parseInt(s8);
 
 
-					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"','" +pending+"')"; // the last redundant s8 is for pending initialization
+					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
 					String q2 = "update room set availability = 'Occupied' where roomnumber = "+s6;
 					c.s.executeUpdate(q1);
 					c.s.executeUpdate(q2);
 
-					System.out.println(pending);
+					JOptionPane.showMessageDialog(null, "New Customer added Successfully.");
 
-					JOptionPane.showMessageDialog(null, "Data Inserted Successfully");
 					new Reception().setVisible(true);
 					setVisible(false);
 

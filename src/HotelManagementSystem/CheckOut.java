@@ -151,47 +151,35 @@ public class CheckOut extends JFrame{
 					return;
 				}
 
-				// Establish a connection
-				String pendingAmt = null;
-				boolean checkoutAllowed = false;
 				conn c = new conn();
+				String deposit = "";
 
 				// Retrieve the pending amount of the selected Customer ID
 				try {
 					ResultSet rs5 = c.s.executeQuery("select * from customer where room='"+roomNum+"'");
 					if(rs5.next()) {
-						pendingAmt = rs5.getString("pending");
+						deposit = rs5.getString("deposit");
 					}
 				} catch(SQLException ee) {
 					ee.printStackTrace();
 				}
-				System.out.println(pendingAmt);
-				// Pending amount of the selected customer ID
+				System.out.println(deposit);
 
-				if(Integer.parseInt(pendingAmt) <=0 ){
-					checkoutAllowed = true;
-				}else{
-					checkoutAllowed = false;
-				}
-
-				if(checkoutAllowed == true) { // if the customer pays all the amount, then he is free to check out
-					// Remove the customer from the CUSTOMER TABLE
-					String deleteSQL = "Delete from customer where number = '"+id+"'";
-					// Update the room status back to AVAILABLE
-					String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
+				// Remove the customer from the CUSTOMER TABLE
+				String deleteSQL = "Delete from customer where number = '"+id+"'";
+				// Update the room status back to AVAILABLE
+				String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
 
 
-					try{
-						c.s.executeUpdate(deleteSQL);
-						c.s.executeUpdate(q2);
-						JOptionPane.showMessageDialog(null, "Check Out Successful");
-						new Reception().setVisible(true);
-						setVisible(false);
-					}catch(SQLException e1){
-						System.out.println(e1.getMessage());
-					}
-				} else {  // if the customer does not pay the full amount, a pop-up notification would appear
-					JOptionPane.showMessageDialog(null, "Customer has a pending balance of RM" + pendingAmt + ". Please settle this amount before checking out.");
+				try{
+					c.s.executeUpdate(deleteSQL);
+					c.s.executeUpdate(q2);
+					JOptionPane.showMessageDialog(null, "Please return the customer with deposit: RM"+deposit);
+					JOptionPane.showMessageDialog(null, "Check Out Successful");
+					new Reception().setVisible(true);
+					setVisible(false);
+				}catch(SQLException e1){
+					System.out.println(e1.getMessage());
 				}
 			}
 		});
