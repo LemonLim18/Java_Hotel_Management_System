@@ -3,7 +3,9 @@ package HotelManagementSystem;
 import java.awt.*;
 import java.awt.EventQueue;
 
-import java.sql.*;	
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.*;
 import javax.swing.*;
 
 import javax.swing.border.EmptyBorder;
@@ -18,6 +20,7 @@ import com.toedter.calendar.JDateChooser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 public class UpdateCheck extends JFrame {
 	private JPanel contentPane;
@@ -169,17 +172,58 @@ public class UpdateCheck extends JFrame {
 		// Set the minimum selectable date to today
 		dateChooser.setMinSelectableDate(new java.util.Date());
 
-		// Deposit
+		// START OF DATE SELECTION FOR DEPOSIT DETERMINATION
+		// Add a PropertyChangeListener to the JDateChooser
+		dateChooser.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				// Check if the property that changed is the date
+				if ("date".equals(evt.getPropertyName())) {
+					// Calculate the difference between the current date and the reservation date
+					java.util.Date currentDate = new java.util.Date();
+					java.util.Date reservationDate = dateChooser.getDate();
+
+					// Check if reservationDate is not null
+					if (reservationDate != null) {
+						long diffInMillies = Math.abs(reservationDate.getTime() - currentDate.getTime());
+						long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+						// Set the deposit amount based on the difference
+						String deposit;
+						if (diff <= 7) {
+							deposit = "200";
+						} else if (diff > 7 && diff <= 14) {
+							deposit = "150";
+						} else if (diff > 14 && diff <= 30) {
+							deposit = "100";
+						} else {
+							deposit = "50";
+						}
+
+						// Set the deposit into the text field
+						txt_Deposit.setText(deposit);
+					}
+				}
+			}
+		});
+		// END OF DATE SELECTION FOR DEPOSIT DETERMINATION
+
+		// Deposit Label
 		JLabel lblNewLabel_4 = new JLabel("<html>Deposit (RM) <span style='color:red;'>*</span></html>");
 		lblNewLabel_4.setBounds(80, 291, 115, 20);
 		componentsPane.add(lblNewLabel_4);
 
-		// original Deposit Field
+		// Deposit Text Field
 		txt_Deposit = new JTextField();
 		txt_Deposit.setBounds(280, 294, 140, 20);
 		componentsPane.add(txt_Deposit);
 		txt_Deposit.setBackground(new Color(205, 237, 255));
 		txt_Deposit.setColumns(10);
+		txt_Deposit.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		txt_Deposit.setToolTipText("Ineditable Field: Select the date to calculate the deposit sum");
+
+		// Make the deposit text field non-editable
+		txt_Deposit.setEditable(false);
 
 		// Beginning of UPDATE BUTTON
 		JButton btnUpdate = new JButton("Update");
@@ -191,10 +235,10 @@ public class UpdateCheck extends JFrame {
                                 
 					String s1 = (String) c1.getSelectedItem();
 					String s2 = (String) choice_roomNum.getSelectedItem(); //s2 is the current latest ROOM NUMBER;
-					String s3 = txt_Name.getText(); //Name
+					String s3 = txt_Name.getText().toUpperCase(); //Name
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String s4 = sdf.format(dateChooser.getDate()); //Date;
-					String s5 = txt_Deposit.getText(); //Deposit
+					String s5 = txt_Deposit.getText().toUpperCase(); //Deposit
 					String oldRoomNumber="";
 
 					// Input validation

@@ -208,7 +208,7 @@ public class CheckOut extends JFrame{
 		btnCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnCheckOut.setBackground(Color.WHITE);
-				btnCheckOut.setForeground(new Color(0x964404));
+				btnCheckOut.setForeground(new Color(0xFF7F00));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -234,7 +234,7 @@ public class CheckOut extends JFrame{
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnExit.setBackground(Color.WHITE);
-				btnExit.setForeground(new Color(0x964404));
+				btnExit.setForeground(new Color(0xFF7F00));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
