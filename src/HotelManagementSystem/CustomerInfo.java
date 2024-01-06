@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -103,14 +104,23 @@ public class CustomerInfo extends JFrame {
 		// END OF WHITE CONTAINER
 
 		// TABLE INITIALIZATION
+		// Create a custom cell renderer
+		class CenterRenderer extends DefaultTableCellRenderer {
+			public CenterRenderer() {
+				setHorizontalAlignment(JLabel.CENTER);
+			}
+		}
+
 		table = new JTable() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// This causes all cells to be not editable
 				return false;
 			}
-		}; //initialize the table for the first use//initialize the table for the first use
-		table.setBounds(25, 70, 820, 340);
+		};
+
+		//initialize the table for the first use//initialize the table for the first use
+		table.setBounds(25, 70, 820, 370);
 		table.setShowGrid(false);
 		table.setRowHeight(25);
 		Color semiTransparentColor = new Color(252, 252, 252, 132);
@@ -125,7 +135,13 @@ public class CustomerInfo extends JFrame {
 		ResultSet rs = c.s.executeQuery(displayCustomersql);
 		table.setModel(DbUtils.resultSetToTableModel(rs));
 
-
+		// DELETE THIS: IF YOU WANT THE DATA TO BE DISPLAYED LEFT, NOT CENTER
+		// Set the cell renderer for each column
+		DefaultTableCellRenderer centerRenderer = new CenterRenderer();
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+		// DELETE THIS: IF YOU WANT THE DATA TO BE DISPLAYED LEFT, NOT CENTER
 
 
 		// RETURN BUTTON
@@ -170,6 +186,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY document";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -203,6 +225,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY number";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -222,7 +250,7 @@ public class CustomerInfo extends JFrame {
 		});
 
 		JButton name = new JButton("Name");
-		name.setBounds(249, 40, 65, 14);
+		name.setBounds(250, 40, 65, 14);
 		name.setForeground(new Color(72, 41, 245));
 		name.setBorder(null);
 		name.setContentAreaFilled(false);
@@ -236,6 +264,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY name";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -269,6 +303,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY gender";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -288,7 +328,7 @@ public class CustomerInfo extends JFrame {
 		});
 
 		JButton country = new JButton("Country");
-		country.setBounds(460, 40, 46, 14);
+		country.setBounds(462, 40, 46, 14);
 		country.setForeground(new Color(72, 41, 245));
 		country.setBorder(null);
 		country.setContentAreaFilled(false);
@@ -302,6 +342,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY country";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -335,6 +381,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY room";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -355,7 +407,7 @@ public class CustomerInfo extends JFrame {
 		});
 
 		JButton lblStatus = new JButton("Check-In Date");
-		lblStatus.setBounds(640, 40, 100, 14);
+		lblStatus.setBounds(643, 40, 100, 14);
 		lblStatus.setForeground(new Color(72, 41, 245));
 		lblStatus.setToolTipText("Sort according to Check-In Date");
 		lblStatus.setBorder(null);
@@ -369,6 +421,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY checkintime";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -389,7 +447,7 @@ public class CustomerInfo extends JFrame {
 
 
 		JButton lblNewLabel_1 = new JButton("Deposit Amt.");
-		lblNewLabel_1.setBounds(742, 40, 100, 14);
+		lblNewLabel_1.setBounds(745, 40, 100, 14);
 		lblNewLabel_1.setForeground(new Color(72, 41, 245));
 		lblNewLabel_1.setBorder(null);
 		lblNewLabel_1.setContentAreaFilled(false);
@@ -403,6 +461,12 @@ public class CustomerInfo extends JFrame {
 					String sql = "SELECT * FROM customer ORDER BY deposit";
 					ResultSet rs = c.s.executeQuery(sql);
 					table.setModel(DbUtils.resultSetToTableModel(rs));
+
+					// Set the cell renderer for each column again
+					for (int i = 0; i < table.getColumnCount(); i++) {
+						table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					}
+
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}

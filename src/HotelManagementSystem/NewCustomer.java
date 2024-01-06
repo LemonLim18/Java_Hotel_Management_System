@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -15,6 +17,11 @@ import java.sql.SQLException;
 // Calendar Picker
 import com.toedter.calendar.JDateChooser;
 import java.text.SimpleDateFormat;
+
+// Import the correct Date class
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 
 public class NewCustomer extends JFrame {
 	Connection conn = null;
@@ -241,6 +248,42 @@ public class NewCustomer extends JFrame {
 		dateChooser.setBounds(280, 316, 150, 20);
 		componentsPane.add(dateChooser);
 
+		// START OF DATE SELECTION FOR DEPOSIT DETERMINATION
+		// Add a PropertyChangeListener to the JDateChooser
+		dateChooser.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				// Check if the property that changed is the date
+				if ("date".equals(evt.getPropertyName())) {
+					// Calculate the difference between the current date and the reservation date
+					Date currentDate = new Date();
+					Date reservationDate = dateChooser.getDate();
+
+					// Check if reservationDate is not null
+					if (reservationDate != null) {
+						long diffInMillies = Math.abs(reservationDate.getTime() - currentDate.getTime());
+						long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+						// Set the deposit amount based on the difference
+						String deposit;
+						if (diff <= 7) {
+							deposit = "200";
+						} else if (diff > 7 && diff <= 14) {
+							deposit = "150";
+						} else if (diff > 14 && diff <= 30) {
+							deposit = "100";
+						} else {
+							deposit = "50";
+						}
+
+						// Set the deposit into the text field
+						t6.setText(deposit);
+					}
+				}
+			}
+		});
+		// END OF DATE SELECTION FOR DEPOSIT DETERMINATION
+
 		// Set the background color for each component
 		for (Component component : dateChooser.getComponents()) {
 			if (component instanceof JTextField) {
@@ -257,6 +300,12 @@ public class NewCustomer extends JFrame {
 		componentsPane.add(t6);
 		t6.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t6.setColumns(10);
+		t6.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		t6.setToolTipText("Ineditable Field: Select the date to calculate the deposit sum");
+
+
+		// Make the deposit text field non-editable
+		t6.setEditable(false);
 
 		// Upon the submission event, the input data are collected and submitted to the database
 		// Add Customer Button
@@ -322,6 +371,7 @@ public class NewCustomer extends JFrame {
 					return;
 				}
 
+
 				// Check if Deposit is empty
 				if (t6.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Deposit is required");
@@ -346,14 +396,14 @@ public class NewCustomer extends JFrame {
 
 				try{
 					String s1 = (String)comboBox.getSelectedItem();
-					String s2 =  t1.getText();
-					String s3 =  t2.getText();
+					String s2 =  t1.getText().toUpperCase();
+					String s3 =  t2.getText().toUpperCase();
 					String s4 =  radio;
-					String s5 =  t3.getText();
+					String s5 =  t3.getText().toUpperCase();
 					// Get the date from the JDateChooser
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					String s7 = sdf.format(dateChooser.getDate());
-					String s8 =  t6.getText();
+					String s8 =  t6.getText().toUpperCase();  //Deposit
 					ResultSet rs5 = c.s.executeQuery("select * from room where roomnumber='"+s6+"'");
 
 
