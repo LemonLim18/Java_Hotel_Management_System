@@ -5,11 +5,16 @@ import java.awt.EventQueue;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
+// Calendar Picker
+import com.toedter.calendar.JDateChooser;
+import java.text.SimpleDateFormat;
 
 public class NewCustomer extends JFrame {
 	Connection conn = null;
@@ -35,15 +40,33 @@ public class NewCustomer extends JFrame {
 
 	public NewCustomer() throws SQLException {
 		//	Beginning of the background image
-		setBounds(530, 200, 850, 630);
+		setBounds(340, 115, 850, 630);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
 
 		// Load the image
-		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/beach 3.jpg"));
-		Image i3 = i1.getImage().getScaledInstance(850, 630, Image.SCALE_DEFAULT); // Scale it to the size of the frame
-		ImageIcon i2 = new ImageIcon(i3);
+		ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/beach 3.jpg"));
+		Image origImage = i1.getImage();
+
+		// Create a new, empty image with the desired width and height
+		BufferedImage scaledImage = new BufferedImage(850, 630, BufferedImage.TYPE_INT_ARGB);
+
+		// Get the Graphics2D object of the new image
+		Graphics2D graphics2D = scaledImage.createGraphics();
+
+		// Set the RenderingHint to value RenderingHints.VALUE_INTERPOLATION_BILINEAR or RenderingHints.VALUE_INTERPOLATION_BICUBIC or RenderingHints.VALUE_INTERPOLATION_BICUBIC
+		// This will enable better algorithms for image scaling
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+				// Draw the original image on the new image
+		graphics2D.drawImage(origImage, 0, 0, 850, 630, null);
+
+		// Dispose the Graphics2D object
+		graphics2D.dispose();
+
+		// Use the new image in your application
+		ImageIcon i2 = new ImageIcon(scaledImage);
 
 		// Create a new JPanel with overridden paintComponent method
 		contentPane = new JPanel() {
@@ -205,12 +228,28 @@ public class NewCustomer extends JFrame {
 		t3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t3.setColumns(10);
 
-		//	Check-In
-		t5 = new JTextField();
-		t5.setBounds(280, 316, 150, 20);
-		componentsPane.add(t5);
-		t5.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		t5.setColumns(10);
+//		//	Check-In Date
+//		t5 = new JTextField();
+//		t5.setBounds(280, 316, 150, 20);
+//		componentsPane.add(t5);
+//		t5.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//		t5.setColumns(10);
+
+		// Check-In Date
+		// Create a JDateChooser
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(280, 316, 150, 20);
+		componentsPane.add(dateChooser);
+
+		// Set the background color for each component
+		for (Component component : dateChooser.getComponents()) {
+			if (component instanceof JTextField) {
+				((JTextField) component).setBorder(null);
+			}
+		}
+
+		// Set the minimum selectable date to today
+		dateChooser.setMinSelectableDate(new java.util.Date());
 
 		//	Deposit
 		t6 = new JTextField();
@@ -276,14 +315,10 @@ public class NewCustomer extends JFrame {
 					return;
 				}
 
+
 				// Check if Check-In Date is empty
-				if (t5.getText().isEmpty()) {
+				if (dateChooser.getDate() == null) {
 					JOptionPane.showMessageDialog(null, "Check-In Date is required");
-					return;
-				}
-				// Validate Check-In Date
-				if (!t5.getText().matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)\\d\\d)$")) {
-					JOptionPane.showMessageDialog(null, "Please enter a valid date in the format dd/mm/yyyy");
 					return;
 				}
 
@@ -315,30 +350,30 @@ public class NewCustomer extends JFrame {
 					String s3 =  t2.getText();
 					String s4 =  radio;
 					String s5 =  t3.getText();
-					String s7 =  t5.getText();
+					// Get the date from the JDateChooser
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String s7 = sdf.format(dateChooser.getDate());
 					String s8 =  t6.getText();
 					ResultSet rs5 = c.s.executeQuery("select * from room where roomnumber='"+s6+"'");
-					String roomPrice = null;
-					if(rs5.next()) {
-						roomPrice = rs5.getString("price");
-					}
-					int pending = 0;
-					pending = Integer.parseInt(roomPrice)- Integer.parseInt(s8);
 
 
-					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"','" +pending+"')"; // the last redundant s8 is for pending initialization
+					String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
 					String q2 = "update room set availability = 'Occupied' where roomnumber = "+s6;
 					c.s.executeUpdate(q1);
 					c.s.executeUpdate(q2);
 
-					System.out.println(pending);
+					JOptionPane.showMessageDialog(null, "New Customer added Successfully.");
 
-					JOptionPane.showMessageDialog(null, "Data Inserted Successfully");
 					new Reception().setVisible(true);
 					setVisible(false);
 
 				}catch(SQLException e1){
 					System.out.println(e1.getMessage());
+					if(e1.getErrorCode() == 1062) {
+						JOptionPane.showMessageDialog(null, "The Customer ID entered already existed. Please enter another ID");
+					}else {
+						System.out.println(e1.getMessage());
+					}
 				}
 				catch(NumberFormatException s){
 					JOptionPane.showMessageDialog(null, "Please enter a valid Number");

@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import java.sql.*;	
 import javax.swing.*;
+
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Font;
@@ -12,18 +13,17 @@ import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+// Calendar Picker
+import com.toedter.calendar.JDateChooser;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class UpdateCheck extends JFrame {
-	Connection conn = null;
-	PreparedStatement pst = null;
 	private JPanel contentPane;
-	private Choice choice_roomNum;
-//	private JTextField txt_Room;
 	private JTextField txt_Name;
 	private JTextField txt_Date;
 	private JTextField txt_Deposit;
-	private JTextField txt_Pending;
-	private JTextField txt_Pay;
-	Choice c1, c2;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,13 +45,13 @@ public class UpdateCheck extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Window Dimension
-		setBounds(375, 120, 850, 630);
+		setBounds(375, 110, 850, 630);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
 
 		// Load the image
-		ImageIcon image1 = new ImageIcon(ClassLoader.getSystemResource("icons/chalet.jpg"));
+		ImageIcon image1 = new ImageIcon(ClassLoader.getSystemResource("icons/updateCheck.jpg"));
 		Image image3 = image1.getImage().getScaledInstance(850, 630, Image.SCALE_DEFAULT);  // Scale it to the size of the frame
 		ImageIcon image2 = new ImageIcon(image3);
 
@@ -81,7 +81,7 @@ public class UpdateCheck extends JFrame {
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				// Set the white background to translucent
 				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.7f));
-				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 45, 45);
+				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 60, 60);
 				super.paintComponent(g);
 			}
 		};
@@ -89,7 +89,7 @@ public class UpdateCheck extends JFrame {
 
 		componentsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, true));
 		componentsPane.setLayout(null);
-		componentsPane.setBounds(170, 70, 500 , 470);
+		componentsPane.setBounds(170, 90, 500 , 440);
 
 		// Add the components to the componentsPane instead of the contentPane
 		JLabel lblUpdateCheckStatus = new JLabel("CUSTOMER STATUS UPDATE");
@@ -100,17 +100,19 @@ public class UpdateCheck extends JFrame {
 		JLabel lblNewLabel = new JLabel("<html>Customer ID <span style='color:red;'>*</span></html>");
 		lblNewLabel.setBounds(80, 115, 200, 14);
 		componentsPane.add(lblNewLabel);
-                
-		c1 = new Choice();
+
+		JComboBox<String> c1 = new JComboBox<String>();
 		try{
 			conn c = new conn();
 			ResultSet rs = c.s.executeQuery("select * from customer");
 			// list of values
 			while(rs.next()){
-				c1.add(rs.getString("number"));  //Import all the values from the database into the list of values
+				c1.addItem(rs.getString("number"));  //Import all the values from the database into the list of values
 			}
 		}catch(Exception e){ }
 		c1.setBounds(280, 115, 140, 20);
+		c1.setFont(new Font("Rambla", Font.PLAIN, 12));
+		c1.setBackground(new Color(219, 245, 255));
 		componentsPane.add(c1);
 
 
@@ -120,66 +122,64 @@ public class UpdateCheck extends JFrame {
 
 		// Customer Name Field
 		txt_Name = new JTextField();
-		txt_Name.setBounds(280, 159, 140, 20);
+		txt_Name.setBounds(280, 160, 140, 21);
 		componentsPane.add(txt_Name);
-		txt_Name.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		txt_Name.setBackground(new Color(205, 237, 255));
 		txt_Name.setColumns(10);
-
+		// Set the font of the JTextField
 
 		JLabel lblNewLabel_1 = new JLabel("<html>Room Number <span style='color:red;'>*</span></html>");
 		lblNewLabel_1.setBounds(80, 201, 107, 14);
 		componentsPane.add(lblNewLabel_1);
 
 		// Room Number Field
-		choice_roomNum = new Choice();
-		choice_roomNum.add("");  // Add an empty string as the first item.
+		JComboBox<String> choice_roomNum = new JComboBox<String>();
+		choice_roomNum.addItem("");  // Add an empty string as the first item.
 		try {
 			conn c = new conn();
 			ResultSet rs = c.s.executeQuery("select * from room where availability='Available'");
 			while(rs.next()) {
 				// Retrieve the roomnumber value from the table
-				choice_roomNum.add(rs.getString("roomnumber"));
+				choice_roomNum.addItem(rs.getString("roomnumber"));
 			}
 		}catch(Exception ignored) { }
 
 		choice_roomNum.setBounds(280, 201, 140, 20);
+		choice_roomNum.setBackground(new Color(219, 245, 255));
+		choice_roomNum.setFont(new Font("Rambla", Font.PLAIN, 12));
+		choice_roomNum.setBorder(null);
 		componentsPane.add(choice_roomNum);
 
 
 		JLabel lblNewLabel_3 = new JLabel("<html>Check-In Date <span style='color:red;'>*</span></html>");
-		lblNewLabel_3.setBounds(80, 246, 107, 14);
+		lblNewLabel_3.setBounds(80, 246, 107, 20);
 		componentsPane.add(lblNewLabel_3);
 
 		// Checked-In Date Field
-		txt_Date = new JTextField();
-		txt_Date.setBounds(280, 246, 140, 20);
-		componentsPane.add(txt_Date);
-		txt_Date.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Date.setColumns(10);
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(280, 249, 140, 22);
+		dateChooser.setBorder(null);
+		componentsPane.add(dateChooser);
 
-		// original amount paid
-		JLabel lblNewLabel_4 = new JLabel("<html>Pending Amt (RM) <span style='color:red;'>*</span></html>");
-		lblNewLabel_4.setBounds(80, 291, 115, 14);
+		// Set the background color for each component
+		for (Component component : dateChooser.getComponents()) {
+			component.setBackground(new Color(205, 237, 255));
+		}
+
+		// Set the minimum selectable date to today
+		dateChooser.setMinSelectableDate(new java.util.Date());
+
+		// Deposit
+		JLabel lblNewLabel_4 = new JLabel("<html>Deposit (RM) <span style='color:red;'>*</span></html>");
+		lblNewLabel_4.setBounds(80, 291, 115, 20);
 		componentsPane.add(lblNewLabel_4);
 
-		// original Amount Paid Field
-		txt_Pending = new JTextField();
-		txt_Pending.setBounds(280, 288, 140, 20);
-		componentsPane.add(txt_Pending);
-		txt_Pending.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Pending.setColumns(10);
-
-		// original pending amount
-		JLabel lblNewLabel_5 = new JLabel("<html>Current Pay Amt (RM) <span style='color:red;'>*</span></html>");
-		lblNewLabel_5.setBounds(80, 332, 150, 14);
-		componentsPane.add(lblNewLabel_5);
-
-		// original Pending Amount Field
-		txt_Pay = new JTextField();
-		txt_Pay.setBounds(280, 329, 140, 20);
-		componentsPane.add(txt_Pay);
-		txt_Pay.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		txt_Pay.setColumns(10);
+		// original Deposit Field
+		txt_Deposit = new JTextField();
+		txt_Deposit.setBounds(280, 294, 140, 20);
+		componentsPane.add(txt_Deposit);
+		txt_Deposit.setBackground(new Color(205, 237, 255));
+		txt_Deposit.setColumns(10);
 
 		// Beginning of UPDATE BUTTON
 		JButton btnUpdate = new JButton("Update");
@@ -189,19 +189,38 @@ public class UpdateCheck extends JFrame {
 				try{
 					conn c = new conn();
                                 
-					String s1 = c1.getSelectedItem();
-					String s2 = choice_roomNum.getSelectedItem(); //s2 is the current latest ROOM NUMBER;
+					String s1 = (String) c1.getSelectedItem();
+					String s2 = (String) choice_roomNum.getSelectedItem(); //s2 is the current latest ROOM NUMBER;
 					String s3 = txt_Name.getText(); //Name
-					String s4 = txt_Date.getText(); //Date;
-					String s5 = txt_Pending.getText(); //Pending
-					String s6 = txt_Pay.getText(); //Current Pay Amount
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String s4 = sdf.format(dateChooser.getDate()); //Date;
+					String s5 = txt_Deposit.getText(); //Deposit
 					String oldRoomNumber="";
 
-					int latestPending = Integer.parseInt(s5) - Integer.parseInt(s6);
-					if(latestPending<0) {
-						JOptionPane.showMessageDialog(null, "Customer paid excessive amount of RM "+ -latestPending + ". Please return the change.");
-						latestPending = 0;  //in case the pending amount is negative, due to the customer pays too much
+					// Input validation
+					if (s1 == null || s1.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Customer ID is required.");
+						return;
+					}
 
+					if (s2 == null || s2.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Room number is required.");
+						return;
+					}
+
+					if (s3 == null || s3.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Name is required.");
+						return;
+					}
+
+					if (dateChooser.getDate() == null) {
+						JOptionPane.showMessageDialog(null, "Check-in date is required.");
+						return;
+					}
+
+					if (s5 == null || s5.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Deposit is required.");
+						return;
 					}
 
 					// Retrieve the old room number from the room table
@@ -214,7 +233,7 @@ public class UpdateCheck extends JFrame {
 					// Room's room: roomnumber
 
 					// UPDATE CUSTOMER BOOKING INFO
-					c.s.executeUpdate("update customer set room = '"+s2+"', name = '"+s3+"', checkintime = '"+s4+"', pending = '"+latestPending+"' where number = '"+s1+"'");
+					c.s.executeUpdate("update customer set room = '"+s2+"', name = '"+s3+"', checkintime = '"+s4+"', deposit = '"+s5+"' where number = '"+s1+"'");
 
 					// If the room number has changed, set the old room to 'Available' and new room to 'Occupied'
 					if (!oldRoomNumber.equals(s2)) {
@@ -229,12 +248,13 @@ public class UpdateCheck extends JFrame {
 					new Reception().setVisible(true);
 					setVisible(false);
 				}catch(Exception ee){
-					JOptionPane.showMessageDialog(null, "Please insert all the values completely.");
+					JOptionPane.showMessageDialog(null, "All required fields should not be left blank.");
+					JOptionPane.showMessageDialog(null, "Tips: Click 'Check' to retrieve all the information of selected customer.");
 					System.out.println(ee);
 				}
 			}
 		});
-		btnUpdate.setBounds(207, 398, 89, 30);
+		btnUpdate.setBounds(207, 363, 89, 30);
 		btnUpdate.setBackground(Color.BLACK);
 		btnUpdate.setForeground(Color.WHITE);
 		componentsPane.add(btnUpdate);
@@ -242,7 +262,7 @@ public class UpdateCheck extends JFrame {
 		btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnUpdate.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnUpdate.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnUpdate.setForeground(new Color(46, 185, 253)); // BLACK FONT when mouse hovers over
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -261,7 +281,7 @@ public class UpdateCheck extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(319, 398, 89, 30);
+		btnExit.setBounds(324, 363, 89, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
@@ -269,7 +289,7 @@ public class UpdateCheck extends JFrame {
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnExit.setForeground(new Color(46, 185, 253)); // BLACK FONT when mouse hovers over
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -281,12 +301,12 @@ public class UpdateCheck extends JFrame {
 
 
 		// Beginning of CHECK BUTTON
-		JButton btnAdd = new JButton("Check");
+		JButton btnCheck = new JButton("Check");
 		// CHECK ACTION
-		btnAdd.addActionListener(new ActionListener() {
+		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					String s1 = c1.getSelectedItem();
+					String s1 = (String)c1.getSelectedItem();
 					conn c = new conn();
 					// Retrieve that one specific data point
 					ResultSet rs1 = c.s.executeQuery("select * from customer where number = "+s1);
@@ -297,61 +317,45 @@ public class UpdateCheck extends JFrame {
 						String room = rs1.getString("room");
 						boolean exists = false;
 						for (int i = 0; i < choice_roomNum.getItemCount(); i++) {
-							if (choice_roomNum.getItem(i).equals(room)) {
+							if (choice_roomNum.getItemAt(i).equals(room)) {
 								exists = true;
 								break;
 							}
 						}
 						// if the listed value never exists before, then add in the value
 						if (!exists) {
-							choice_roomNum.add(room);
+							choice_roomNum.addItem(room);
 						}
-						choice_roomNum.select(room);
+						choice_roomNum.setSelectedItem(room);
 						txt_Name.setText(rs1.getString("name"));
-						txt_Date.setText(rs1.getString("checkintime"));
-//						txt_Deposit.setText(rs1.getString("deposit"));  // Disable it cuz the CURRENT PAY TEXT FIELD IS NOW BLANK
+						try {
+							SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+							java.util.Date utilDate = sdf.parse(rs1.getString("checkintime"));
+							java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+							dateChooser.setDate(sqlDate);
+						} catch (ParseException ex) {
+							ex.printStackTrace();
+						}
+						txt_Deposit.setText(rs1.getString("deposit"));
 					}
-				}catch(Exception ignored){}
-
-				try{
-					String pending = "";
-					conn c  = new conn();
-					ResultSet rs2 = c.s.executeQuery("select * from customer where room = " + choice_roomNum.getSelectedItem());
-					while(rs2.next()){
-						// Price to pay
-						pending = rs2.getString("pending");
-					}
-
-  					int pendingInt = Integer.parseInt(pending);
-					boolean fullPayStatus = false;
-					if(pendingInt<=0) {
-						fullPayStatus = true; //if there's no remaining amount, fullPay is true
-						pendingInt = 0; // if the customer gives more than what they pay make it zero too
-					} else {
-						fullPayStatus = false; // if there's still remaining amount, fullPay is false
-					}
-					System.out.println("Pending Amount:"+pendingInt); // For testing purpose
-					// Remaining to be paid
-					txt_Pending.setText(Integer.toString(pendingInt));
-
 				}catch(Exception ignored){}
 			}
 		});
 
-		btnAdd.setBounds(95, 398, 89, 30);
-		btnAdd.setBackground(Color.BLACK);
-		btnAdd.setForeground(Color.WHITE);
-		componentsPane.add(btnAdd);
+		btnCheck.setBounds(90, 363, 89, 30);
+		btnCheck.setBackground(Color.BLACK);
+		btnCheck.setForeground(Color.WHITE);
+		componentsPane.add(btnCheck);
 
-		btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+		btnCheck.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnAdd.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnAdd.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnCheck.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
+				btnCheck.setForeground(new Color(46, 185, 253)); // BLACK FONT when mouse hovers over
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				btnAdd.setBackground(Color.BLACK); // Original color of background
-				btnAdd.setForeground(Color.WHITE); // Original color of font
+				btnCheck.setBackground(Color.BLACK); // Original color of background
+				btnCheck.setForeground(Color.WHITE); // Original color of font
 			}
 		});
 		// End of CHECK BUTTON

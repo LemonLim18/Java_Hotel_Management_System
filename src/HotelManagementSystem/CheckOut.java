@@ -4,13 +4,15 @@ import java.awt.*;
 import java.awt.EventQueue;
 
 
-import java.sql.*;	
+import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Font;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
+
+
 
 public class CheckOut extends JFrame{
 	Connection conn = null;
@@ -40,7 +42,7 @@ public class CheckOut extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Window Dimension
-		setBounds(375, 150, 800, 545);
+		setBounds(355, 150, 800, 545);
 
 		// Make the JFrame non-resizable
 		setResizable(false);
@@ -151,51 +153,53 @@ public class CheckOut extends JFrame{
 					return;
 				}
 
-				// Establish a connection
-				String pendingAmt = null;
-				boolean checkoutAllowed = false;
+				// Confirmation dialog
+				JPanel message = new JPanel();
+				message.setPreferredSize(new Dimension(280, 40)); // Set your preferred dimensions
+				message.setLayout(new BorderLayout());
+
+				JLabel text = new JLabel("<html><center>Are you sure to check out the customer?<br> This process cannot be undo.</center></html>", JLabel.CENTER);
+				message.add(text);
+
+				int dialogResult = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION);
+				if(dialogResult == JOptionPane.NO_OPTION){
+					// If user choose NO, then return and do nothing
+					return;
+				}
+
 				conn c = new conn();
+				String deposit = "";
 
 				// Retrieve the pending amount of the selected Customer ID
 				try {
 					ResultSet rs5 = c.s.executeQuery("select * from customer where room='"+roomNum+"'");
 					if(rs5.next()) {
-						pendingAmt = rs5.getString("pending");
+						deposit = rs5.getString("deposit");
 					}
 				} catch(SQLException ee) {
 					ee.printStackTrace();
 				}
-				System.out.println(pendingAmt);
-				// Pending amount of the selected customer ID
+				System.out.println(deposit);
 
-				if(Integer.parseInt(pendingAmt) <=0 ){
-					checkoutAllowed = true;
-				}else{
-					checkoutAllowed = false;
-				}
-
-				if(checkoutAllowed == true) { // if the customer pays all the amount, then he is free to check out
-					// Remove the customer from the CUSTOMER TABLE
-					String deleteSQL = "Delete from customer where number = '"+id+"'";
-					// Update the room status back to AVAILABLE
-					String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
+				// Remove the customer from the CUSTOMER TABLE
+				String deleteSQL = "Delete from customer where number = '"+id+"'";
+				// Update the room status back to AVAILABLE
+				String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
 
 
-					try{
-						c.s.executeUpdate(deleteSQL);
-						c.s.executeUpdate(q2);
-						JOptionPane.showMessageDialog(null, "Check Out Successful");
-						new Reception().setVisible(true);
-						setVisible(false);
-					}catch(SQLException e1){
-						System.out.println(e1.getMessage());
-					}
-				} else {  // if the customer does not pay the full amount, a pop-up notification would appear
-					JOptionPane.showMessageDialog(null, "Customer has a pending balance of RM" + pendingAmt + ". Please settle this amount before checking out.");
+				try{
+					c.s.executeUpdate(deleteSQL);
+					c.s.executeUpdate(q2);
+					JOptionPane.showMessageDialog(null, "Please return the customer with deposit: RM"+deposit);
+					JOptionPane.showMessageDialog(null, "Check Out Successful");
+					new Reception().setVisible(true);
+					setVisible(false);
+				}catch(SQLException e1){
+					System.out.println(e1.getMessage());
 				}
 			}
 		});
-		btnCheckOut.setBounds(110, 223, 125, 30);
+		btnCheckOut.setBounds(110, 223, 123, 30);
 		btnCheckOut.setBackground(Color.BLACK);
 		btnCheckOut.setForeground(Color.WHITE);
 		componentsPane.add(btnCheckOut);
@@ -203,8 +207,8 @@ public class CheckOut extends JFrame{
 		// Hover Effect for Button
 		btnCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnCheckOut.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnCheckOut.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnCheckOut.setBackground(Color.WHITE);
+				btnCheckOut.setForeground(new Color(0x964404));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -213,7 +217,7 @@ public class CheckOut extends JFrame{
 			}
 		});
 		// Hover Effect for Button
-		
+
 		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,7 +225,7 @@ public class CheckOut extends JFrame{
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(270, 223, 125, 30);
+		btnExit.setBounds(270, 223, 123, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
@@ -229,8 +233,8 @@ public class CheckOut extends JFrame{
 		// Hover Effect for Button
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnExit.setBackground(Color.WHITE);
+				btnExit.setForeground(new Color(0x964404));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
