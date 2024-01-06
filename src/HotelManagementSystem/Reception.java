@@ -16,7 +16,7 @@ public class Reception extends JFrame {
 	
 	public Reception(){
 		
-		setBounds(530, 200, 850, 600);
+		setBounds(360, 100, 850, 600);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);

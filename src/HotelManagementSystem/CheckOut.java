@@ -4,13 +4,15 @@ import java.awt.*;
 import java.awt.EventQueue;
 
 
-import java.sql.*;	
+import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Font;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
+
+
 
 public class CheckOut extends JFrame{
 	Connection conn = null;
@@ -151,6 +153,20 @@ public class CheckOut extends JFrame{
 					return;
 				}
 
+				// Confirmation dialog
+				JPanel message = new JPanel();
+				message.setPreferredSize(new Dimension(280, 40)); // Set your preferred dimensions
+				message.setLayout(new BorderLayout());
+
+				JLabel text = new JLabel("<html><center>Are you sure to check out the customer?<br> This process cannot be undo.</center></html>", JLabel.CENTER);
+				message.add(text);
+
+				int dialogResult = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION);
+				if(dialogResult == JOptionPane.NO_OPTION){
+					// If user choose NO, then return and do nothing
+					return;
+				}
+
 				conn c = new conn();
 				String deposit = "";
 
@@ -183,7 +199,7 @@ public class CheckOut extends JFrame{
 				}
 			}
 		});
-		btnCheckOut.setBounds(110, 223, 125, 30);
+		btnCheckOut.setBounds(110, 223, 123, 30);
 		btnCheckOut.setBackground(Color.BLACK);
 		btnCheckOut.setForeground(Color.WHITE);
 		componentsPane.add(btnCheckOut);
@@ -191,8 +207,8 @@ public class CheckOut extends JFrame{
 		// Hover Effect for Button
 		btnCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnCheckOut.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnCheckOut.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnCheckOut.setBackground(Color.WHITE);
+				btnCheckOut.setForeground(new Color(0x964404));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -201,7 +217,7 @@ public class CheckOut extends JFrame{
 			}
 		});
 		// Hover Effect for Button
-		
+
 		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -209,7 +225,7 @@ public class CheckOut extends JFrame{
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(270, 223, 125, 30);
+		btnExit.setBounds(270, 223, 123, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
@@ -217,8 +233,8 @@ public class CheckOut extends JFrame{
 		// Hover Effect for Button
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnExit.setBackground(Color.WHITE);
+				btnExit.setForeground(new Color(0x964404));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {

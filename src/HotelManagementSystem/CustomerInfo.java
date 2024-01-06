@@ -5,6 +5,8 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
 
 import java.sql.*;	
 import javax.swing.*;
@@ -101,7 +103,13 @@ public class CustomerInfo extends JFrame {
 		// END OF WHITE CONTAINER
 
 		// TABLE INITIALIZATION
-		table = new JTable(); //initialize the table for the first use
+		table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// This causes all cells to be not editable
+				return false;
+			}
+		}; //initialize the table for the first use//initialize the table for the first use
 		table.setBounds(25, 70, 820, 340);
 		table.setShowGrid(false);
 		table.setRowHeight(25);
@@ -125,7 +133,7 @@ public class CustomerInfo extends JFrame {
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnExit.setBackground(Color.WHITE); // WHITE BG when mouse hovers over
-				btnExit.setForeground(Color.BLACK); // BLACK FONT when mouse hovers over
+				btnExit.setForeground(new Color(64, 26, 241)); // BLACK FONT when mouse hovers over
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -140,52 +148,278 @@ public class CustomerInfo extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnExit.setBounds(380, 453, 120, 30);
+		btnExit.setBounds(360, 448, 120, 30);
 		btnExit.setBackground(Color.BLACK);
 		btnExit.setForeground(Color.WHITE);
 		componentsPane.add(btnExit);
 		// END OF RETURN BUTTON
 
-		lblId = new JLabel("ID Document");
-		lblId.setBounds(40, 32, 105, 14);
-		lblId.setForeground(new Color(72, 41, 245));
-		componentsPane.add(lblId);
-                
-		JLabel l1 = new JLabel("Customer ID");
-		l1.setBounds(145, 32, 100, 14);
-		l1.setForeground(new Color(72, 41, 245));
-		componentsPane.add(l1);
-		
-		lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(263, 32, 65, 14);
-		lblNewLabel.setForeground(new Color(72, 41, 245));
-		componentsPane.add(lblNewLabel);
-		
-		lblGender = new JLabel("Gender");
-		lblGender.setBounds( 360, 32, 46, 14);
-		lblGender.setForeground(new Color(72, 41, 245));
-		componentsPane.add(lblGender);
-		
-		lblCountry = new JLabel("Country");
-		lblCountry.setBounds(460, 32, 46, 14);
-		lblCountry.setForeground(new Color(72, 41, 245));
-		componentsPane.add(lblCountry);
-		
-		lblRoom = new JLabel("Room");
-		lblRoom.setBounds(570, 32, 46, 14);
+		JButton btnId = new JButton("ID Document");
+		btnId.setBounds(3, 31, 150, 30);
+		btnId.setForeground(new Color(72, 41, 245));
+		btnId.setBorder(null);
+		btnId.setContentAreaFilled(false);
+		componentsPane.add(btnId);
+		btnId.setToolTipText("Sort according to ID Document");
+
+		// Add ActionListener to the button
+		btnId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY document";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		btnId.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				btnId.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				btnId.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				btnId.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				btnId.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton customerId = new JButton("Customer ID");
+		customerId.setBounds(105, 40, 150, 14);
+		customerId.setForeground(new Color(72, 41, 245));
+		customerId.setBorder(null);
+		customerId.setContentAreaFilled(false);
+		customerId.setToolTipText("Sort according to Customer ID");
+		componentsPane.add(customerId);
+
+		customerId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY number";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		customerId.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				customerId.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				customerId.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				customerId.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				customerId.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton name = new JButton("Name");
+		name.setBounds(249, 40, 65, 14);
+		name.setForeground(new Color(72, 41, 245));
+		name.setBorder(null);
+		name.setContentAreaFilled(false);
+		name.setToolTipText("Sort according to Customer Name");
+		componentsPane.add(name);
+
+		name.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY name";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		name.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				name.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				name.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				name.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				name.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton gender = new JButton("Gender");
+		gender.setBounds( 360, 40, 46, 14);
+		gender.setForeground(new Color(72, 41, 245));
+		gender.setBorder(null);
+		gender.setContentAreaFilled(false);
+		gender.setToolTipText("Sort according to Gender");
+		componentsPane.add(gender);
+
+		gender.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY gender";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		gender.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				gender.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				gender.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				gender.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				gender.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton country = new JButton("Country");
+		country.setBounds(460, 40, 46, 14);
+		country.setForeground(new Color(72, 41, 245));
+		country.setBorder(null);
+		country.setContentAreaFilled(false);
+		country.setToolTipText("Sort according to Country");
+		componentsPane.add(country);
+
+		country.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY country";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		country.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				country.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				country.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				country.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				country.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton lblRoom = new JButton("Room");
+		lblRoom.setBounds(564, 40, 46, 14);
 		lblRoom.setForeground(new Color(72, 41, 245));
+		lblRoom.setBorder(null);
+		lblRoom.setContentAreaFilled(false);
+		lblRoom.setToolTipText("Sort according to Room Number");
 		componentsPane.add(lblRoom);
-		
-		lblStatus = new JLabel("Check-in Date");
-		lblStatus.setBounds(648, 32, 100, 14);
+
+		lblRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY room";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		// Add a hover effect
+		lblRoom.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				lblRoom.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				lblRoom.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				lblRoom.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				lblRoom.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		JButton lblStatus = new JButton("Check-In Date");
+		lblStatus.setBounds(640, 40, 100, 14);
 		lblStatus.setForeground(new Color(72, 41, 245));
+		lblStatus.setToolTipText("Sort according to Check-In Date");
+		lblStatus.setBorder(null);
+		lblStatus.setContentAreaFilled(false);
 		componentsPane.add(lblStatus);
-		
-		lblNewLabel_1 = new JLabel("Deposit Amt.");
-		lblNewLabel_1.setBounds(755, 32, 100, 14);
+
+		lblStatus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY checkintime";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		lblStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				lblStatus.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				lblStatus.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				lblStatus.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				lblStatus.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+
+		JButton lblNewLabel_1 = new JButton("Deposit Amt.");
+		lblNewLabel_1.setBounds(742, 40, 100, 14);
 		lblNewLabel_1.setForeground(new Color(72, 41, 245));
+		lblNewLabel_1.setBorder(null);
+		lblNewLabel_1.setContentAreaFilled(false);
+		lblNewLabel_1.setToolTipText("Sort according to Deposit Amount");
 		componentsPane.add(lblNewLabel_1);
 
+		lblNewLabel_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Execute a SQL query to fetch the data sorted by ID
+					String sql = "SELECT * FROM customer ORDER BY deposit";
+					ResultSet rs = c.s.executeQuery(sql);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
+		lblNewLabel_1.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				lblNewLabel_1.setForeground(new Color(173, 42, 250)); // Change the font color when the mouse hovers over
+				lblNewLabel_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				lblNewLabel_1.setForeground(new Color(72, 41, 245)); // Change the font color back when the mouse leaves
+				lblNewLabel_1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
 
 		// Add all the components that we insert into the componentsPane into the contentPane container
 		contentPane.add(componentsPane);
