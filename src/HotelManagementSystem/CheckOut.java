@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.EventQueue;
 
 
+import java.awt.image.BufferedImage;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,6 +38,29 @@ public class CheckOut extends JFrame{
 		this.dispose();
 	}
 
+	public ImageIcon getScaledImage(ImageIcon srcIcon, int w, int h){
+		Image srcImg = srcIcon.getImage();
+		int originalWidth = srcImg.getWidth(null);
+		int originalHeight = srcImg.getHeight(null);
+		double aspectRatio = (double) originalWidth / originalHeight;
+
+		// Preserve aspect ratio
+		if (w < h) {
+			h = (int) (w / aspectRatio);
+		} else {
+			w = (int) (h * aspectRatio);
+		}
+
+		BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = resizedImg.createGraphics();
+
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2.drawImage(srcImg, 0, 0, w, h, null);
+		g2.dispose();
+
+		return new ImageIcon(resizedImg);
+	}
+
 	// CheckOut MAIN FUNCTION
 	public CheckOut() throws SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,9 +72,10 @@ public class CheckOut extends JFrame{
 		setResizable(false);
 
 		// Load the background image
-		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/sunset.jpg"));
-		Image i3 = i1.getImage().getScaledInstance(800, 550,Image.SCALE_DEFAULT);
-		ImageIcon i2 = new ImageIcon(i3);
+		ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("icons/replacement.jpg"));
+
+// Use the getScaledImage method to resize the image
+		ImageIcon i2 = getScaledImage(i1, 700, 550);
 
 		// Create a new JPanel with overridden paintComponent method
 		contentPane = new JPanel() {
@@ -77,8 +102,8 @@ public class CheckOut extends JFrame{
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				// Set the white background to translucent
-				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 45, 45);
+				g2.setColor(new Color(1.0f, 1.0f, 1.0f, 0.7f));
+				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 50, 50);
 				super.paintComponent(g);
 			}
 		};
@@ -184,7 +209,7 @@ public class CheckOut extends JFrame{
 				// Remove the customer from the CUSTOMER TABLE
 				String deleteSQL = "Delete from customer where number = '"+id+"'";
 				// Update the room status back to AVAILABLE
-				String q2 = "update room set availability = 'Available' where roomnumber = '"+roomNum+"'";
+				String q2 = "update room set availability = 'Available', cleaning_status = 'Not Cleaned' where roomnumber = '"+roomNum+"'";
 
 
 				try{

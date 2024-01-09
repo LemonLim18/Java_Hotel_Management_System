@@ -211,7 +211,7 @@ public class NewCustomer extends JFrame {
 		c1 = new Choice();
 		try{
 			conn c = new conn();
-			ResultSet rs = c.s.executeQuery("select * from room where availability='Available'");
+			ResultSet rs = c.s.executeQuery("select * from room where availability='Available'and cleaning_status='Cleaned'");
 			while(rs.next()){
 				c1.add(rs.getString("roomnumber"));
 			}
@@ -295,7 +295,7 @@ public class NewCustomer extends JFrame {
 		dateChooser.setMinSelectableDate(new java.util.Date());
 
 		//	Deposit
-		t6 = new JTextField();
+		t6 = new JTextField("*Select Date for Deposit*");
 		t6.setBounds(280, 359, 150, 20);
 		componentsPane.add(t6);
 		t6.setBorder(javax.swing.BorderFactory.createEmptyBorder());
