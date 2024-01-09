@@ -121,7 +121,7 @@ public class NewCustomer extends JFrame {
 		lblId.setBounds(80, 76, 200, 14);
 		componentsPane.add(lblId);
 
-		comboBox = new JComboBox(new String[] {"Passport", "Identification Card", "Driving License", "Voter ID"});
+		comboBox = new JComboBox(new String[] {"Identification Card","Passport", "Driving License", "Voter ID"});
 		comboBox.setBounds(280, 73, 150, 20);
 		comboBox.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		componentsPane.add(comboBox);
