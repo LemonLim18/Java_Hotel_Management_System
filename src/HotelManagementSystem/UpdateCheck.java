@@ -214,7 +214,7 @@ public class UpdateCheck extends JFrame {
 		componentsPane.add(lblNewLabel_4);
 
 		// Deposit Text Field
-		txt_Deposit = new JTextField();
+		txt_Deposit = new JTextField("*Select Date for Deposit*");
 		txt_Deposit.setBounds(280, 294, 140, 20);
 		componentsPane.add(txt_Deposit);
 		txt_Deposit.setBackground(new Color(205, 237, 255));
