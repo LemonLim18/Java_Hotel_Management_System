@@ -45,6 +45,13 @@ public class NewCustomer extends JFrame {
 		});
 	}
 
+	public void scaleFontSize(JButton button, float scaleFactor) {
+		Font originalFont = button.getFont();
+		float newSize = originalFont.getSize() * scaleFactor;
+		Font newFont = originalFont.deriveFont(newSize);
+		button.setFont(newFont);
+	}
+
 	public NewCustomer() throws SQLException {
 		//	Beginning of the background image
 		setBounds(340, 115, 850, 630);
@@ -112,6 +119,70 @@ public class NewCustomer extends JFrame {
 		componentsPane.setBounds(170, 70, 500, 470);
 
 		// Add the components to the componentsPane instead of the contentPane
+		// A modal dialog as the info hub
+		// Create the info button
+		JButton infoButton = new JButton("\uD835\uDC22") {
+			protected void paintComponent(Graphics g) {
+				if (getModel().isArmed()) {
+					g.setColor(Color.lightGray);
+				} else {
+					g.setColor(getBackground());
+				}
+				g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
+				super.paintComponent(g);
+			}
+
+			protected void paintBorder(Graphics g) {
+				g.setColor(getForeground());
+				g.drawOval(0, 0, getSize().width - 1, getSize().height - 1);
+			}
+		};
+		infoButton.setForeground(new Color(0xE53B3B3B, true)); // Set the text color to red
+
+		scaleFontSize(infoButton, 1.5f); // Increase font size by 50%
+
+		infoButton.setMargin(new Insets(-2, -2, 0, 0));
+		infoButton.setContentAreaFilled(false);
+		infoButton.setBounds(452, 13, 30, 30); // Adjust these values as needed
+
+		// Change the button color on mouse hover
+		infoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				infoButton.setBackground(new Color(0x7EFFFFFF, true)); // Set color to light gray
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				infoButton.setBackground(UIManager.getColor("control")); // Reset to default color
+			}
+		});
+
+		infoButton.addActionListener(e -> {
+			// Create a modal dialog
+			JDialog dialog = new JDialog();
+			dialog.setModal(true);
+			dialog.setTitle("Booking Information");
+			dialog.setSize(300, 250); // Adjust size as needed
+
+			// Create a panel with BoxLayout
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+			// Modal Dialog Content
+			JLabel label = new JLabel("<html><body style='width: 200px'><br><div style='text-align: center; text-decoration: underline'><b>Deposit Amount List:</b></div><br>&emsp;&emsp;1. Within a week of booking: <b>RM200</b><br><br>&emsp;&emsp;2. 1-2 weeks before booking: <b>RM150</b><br><br>&emsp;&emsp;3. 2-4 weeks before booking: <b>RM100</b><br><br>&emsp;&emsp;4. More than a month before booking: <b>RM50</b></body></html>");
+			label.setFont(label.getFont().deriveFont(Font.PLAIN));  // Set font to plain
+			panel.add(label);
+
+			// Add the panel to the dialog
+			dialog.getContentPane().add(panel);
+
+			// Display the dialog
+			dialog.setLocationRelativeTo(this); // Center on screen
+			dialog.setVisible(true);
+		});
+// Add the button to the container
+		componentsPane.add(infoButton);
+
+
 		JLabel lblName = new JLabel("NEW CUSTOMER");
 		lblName.setFont(new Font("Rambla", Font.BOLD, 20));
 		lblName.setBounds(170, 11, 280, 53);
@@ -266,12 +337,16 @@ public class NewCustomer extends JFrame {
 
 						// Set the deposit amount based on the difference
 						String deposit;
+						//  Within a week: RM200
 						if (diff <= 7) {
 							deposit = "200";
+						// Within 2 weeks: RM150
 						} else if (diff > 7 && diff <= 14) {
 							deposit = "150";
+						// Within half month: RM100
 						} else if (diff > 14 && diff <= 30) {
 							deposit = "100";
+						// A month before: RM50
 						} else {
 							deposit = "50";
 						}
