@@ -135,9 +135,47 @@ public class CheckOut extends JFrame{
 		c1.setBounds(250, 105, 156, 20);
 		componentsPane.add(c1);
 
-		JButton l2 = new JButton("🔍");
-		l2.setBounds(416,150,46,20);
+//		JButton l2 = new JButton("🔍");
+//		l2.setBounds(416,150,46,20);
+//		componentsPane.add(l2);
+
+		JButton l2 = new JButton("🔍") {
+			protected void paintComponent(Graphics g) {
+				if (getModel().isArmed()) {
+					g.setColor(new Color(0xFFFFFF));
+				} else {
+					g.setColor(getBackground());
+				}
+				g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
+				super.paintComponent(g);
+			}
+
+			protected void paintBorder(Graphics g) {
+				g.setColor(getForeground());
+				g.drawOval(0, 0, getSize().width - 1, getSize().height - 1);
+			}
+		};
+
+		// change the button color on mouse hover
+		l2.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				l2.setBackground(new Color(0xFFD5D5D5, true));
+				l2.setForeground(Color.BLACK);
+				l2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				l2.setForeground(Color.BLACK);
+				l2.setBackground(UIManager.getColor("control")); // Reset to default color
+			}
+		});
+
+		l2.setMargin(new Insets(0, 0, 0, 0));
+		l2.setContentAreaFilled(false);
+		l2.setBounds(416,150,23,23);
 		componentsPane.add(l2);
+
+
 
 		l2.addActionListener(new ActionListener(){
 
@@ -163,7 +201,7 @@ public class CheckOut extends JFrame{
 		t1 = new JTextField();
 		t1.setBounds(250, 150, 156, 20);
 		componentsPane.add(t1);
-		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+//		t1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		t1.setColumns(10);
 
 		// CHECK OUT
@@ -233,7 +271,7 @@ public class CheckOut extends JFrame{
 		btnCheckOut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnCheckOut.setBackground(Color.WHITE);
-				btnCheckOut.setForeground(new Color(0xFF7F00));
+				btnCheckOut.setForeground(new Color(0x65423C));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -259,7 +297,7 @@ public class CheckOut extends JFrame{
 		btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
 				btnExit.setBackground(Color.WHITE);
-				btnExit.setForeground(new Color(0xFF7F00));
+				btnExit.setForeground(new Color(0x65423C));
 			}
 
 			public void mouseExited(java.awt.event.MouseEvent evt) {
